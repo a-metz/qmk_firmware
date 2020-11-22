@@ -10,6 +10,7 @@
 #define KC_THUMB_L1 LCTL_T(KC_TAB)
 #define KC_THUMB_R0 LT(_NUMERIC, KC_ENT)
 #define KC_THUMB_R1 RSFT_T(KC_BSPC)
+#define KC_THUMB_R1_F RSFT_T(KC_DEL)
 
 #define KC_PREV_WORD LCTL(KC_LEFT)
 #define KC_NEXT_WORD LCTL(KC_RGHT)
@@ -36,20 +37,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_ALPHA] = LAYOUT_WHTK(
         KC_NO,         KC_NO,         KC_GRV,        KC_EQL,        KC_MINS,       KC_SLSH_BSLS,  KC_QUOT,       KC_DOT_COMM,   KC_EXLM_QUES,  KC_SCLN,       KC_VOLD,       KC_VOLU,
         MACRO_1_PLAY,  KC_Q,          KC_W,          KC_E,          KC_R,          KC_T,          KC_Y,          KC_U,          KC_I,          KC_O,          KC_P,          KC_PSCR,
-        MACRO_2_PLAY,  KC_A,          KC_S,          KC_D,          KC_F,          KC_G,          KC_H,          KC_J,          KC_K,          KC_L,          KC_ESC,        KC_INS,
-        KC_LALT,       KC_LSFT,       KC_Z,          KC_X,          KC_C,          KC_V,          KC_B,          KC_N,          KC_M,          KC_DEL,        KC_RCTL,       KC_RALT,
+        MACRO_2_PLAY,  KC_A,          KC_S,          KC_D,          KC_F,          KC_G,          KC_H,          KC_J,          KC_K,          KC_L,          KC_DEL,        KC_INS,
+        KC_LALT,       KC_LSFT,       KC_Z,          KC_X,          KC_C,          KC_V,          KC_B,          KC_N,          KC_M,          KC_ESC,        KC_RCTL,       KC_RALT,
                                       KC_DEL,        KC_ENT,                                                                    NORMAL_MODE,   MAC_MODE,
                                                                     KC_THUMB_L1,   KC_THUMB_L0,   KC_THUMB_R0,   KC_THUMB_R1,
-                                                                    KC_LGUI,       MO(_MOUSE),    OSL(_UMLAUT),  TO(_FUNC),
-                                                                    LSFT(KC_LGUI), SH_TG,         TO(_NUMERIC),  TO(_MOUSE)
+                                                                    KC_LGUI,       MO(_MOUSE),    OSL(_UMLAUT),  TO(_MOUSE),
+                                                                    LSFT(KC_LGUI), SH_TG,         TO(_NUMERIC),  TO(_FUNC)
     ),
     [_FUNC] = LAYOUT_WHTK(
-        DYN_REC_STOP,  KC_NO,         KC_AT,         KC_LT,         KC_GT,         KC_CIRC,       KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_MUTE,       KC_NO,
-        MACRO_1_REC,   KC_NO,         KC_HASH,       KC_LCBR,       KC_RCBR,       KC_ASTR,       KC_PREV_WORD,  KC_PREV_TAB,   KC_NEXT_TAB,   KC_NEXT_WORD,  KC_NO,         KC_PAUS,
-        MACRO_2_REC,   KC_NO,         KC_DLR,        KC_LPRN,       KC_RPRN,       KC_AMPR,       KC_LEFT,       KC_DOWN,       KC_UP,         KC_RGHT,       KC_TRNS,       KC_SLCK,
-        KC_TRNS,       KC_TRNS,       KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,       KC_HOME,       KC_PGDN,       KC_PGUP,       KC_END,        KC_TRNS,       KC_TRNS,
+        DYN_REC_STOP,  KC_NO,         KC_AT,         KC_LT,         KC_GT,         KC_CIRC,       KC_PREV_TAB,   KC_NEXT_TAB,   KC_NO,         KC_NO,         KC_MUTE,       KC_NO,
+        MACRO_1_REC,   KC_NO,         KC_HASH,       KC_LCBR,       KC_RCBR,       KC_ASTR,       KC_PGUP,       KC_PREV_WORD,  KC_UP,         KC_NEXT_WORD,  KC_NO,         KC_PAUS,
+        MACRO_2_REC,   KC_NO,         KC_DLR,        KC_LPRN,       KC_RPRN,       KC_AMPR,       KC_PGDN,       KC_LEFT,       KC_DOWN,       KC_RGHT,       KC_NO,         KC_SLCK,
+        KC_TRNS,       KC_TRNS,       KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,       KC_HOME,       KC_HOME,       KC_NO,         KC_END,        KC_TRNS,       KC_TRNS,
                                       KC_NO,         KC_NO,                                                                     KC_NO,         KC_NO,
-                                                                    KC_TRNS,       KC_TRNS,       KC_TRNS,       KC_TRNS,
+                                                                    KC_TRNS,       KC_TRNS,       KC_TRNS,       KC_THUMB_R1_F,
                                                                     KC_TRNS,       KC_TRNS,       TO(_ALPHA),    KC_TRNS,
                                                                     KC_TRNS,       RESET,         KC_TRNS,       KC_TRNS
     ),
@@ -75,11 +76,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_MOUSE] = LAYOUT_WHTK(
         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_MPLY,       KC_MNXT,
-        KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_BTN1,       KC_BTN2,       KC_BTN3,       KC_NO,         KC_NO,
-        KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_MS_L,       KC_MS_D,       KC_MS_U,       KC_MS_R,       KC_NO,         KC_NO,
-        KC_TRNS,       KC_TRNS,       KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_WH_L,       KC_WH_D,       KC_WH_U,       KC_WH_R,       KC_TRNS,       KC_TRNS,
+        KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_WH_U,       KC_WH_D,       KC_MS_U,       KC_WH_R,       KC_NO,         KC_NO,
+        KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_WH_D,       KC_MS_L,       KC_MS_D,       KC_MS_R,       KC_NO,         KC_NO,
+        KC_TRNS,       KC_TRNS,       KC_NO,         KC_NO,         KC_NO,         KC_NO,         KC_BTN3,       KC_NO,         KC_NO,         KC_NO,         KC_TRNS,       KC_TRNS,
                                       KC_NO,         KC_NO,                                                                     KC_NO,         KC_NO,
-                                                                    KC_TRNS,       KC_TRNS,       KC_TRNS,       KC_TRNS,
+                                                                    KC_TRNS,       KC_TRNS,       KC_BTN1,       KC_BTN2,
                                                                     KC_TRNS,       KC_TRNS,       TO(_ALPHA),    KC_TRNS,
                                                                     KC_TRNS,       KC_TRNS,       KC_TRNS,       KC_TRNS
     ),
@@ -253,6 +254,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
         case KC_THUMB_L1:
         case KC_THUMB_R1:
+        case KC_THUMB_R1_F:
             return TAPPING_TERM_MODIFIER;
 
         default:
