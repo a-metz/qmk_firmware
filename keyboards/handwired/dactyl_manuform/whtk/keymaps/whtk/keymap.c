@@ -37,8 +37,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_ALPHA] = LAYOUT_WHTK(
         KC_NO,         KC_NO,         KC_GRV,        KC_EQL,        KC_MINS,       KC_SLSH_BSLS,  KC_QUOT,       KC_DOT_COMM,   KC_EXLM_QUES,  KC_SCLN,       KC_VOLD,       KC_VOLU,
         MACRO_1_PLAY,  KC_Q,          KC_W,          KC_E,          KC_R,          KC_T,          KC_Y,          KC_U,          KC_I,          KC_O,          KC_P,          KC_PSCR,
-        MACRO_2_PLAY,  KC_A,          KC_S,          KC_D,          KC_F,          KC_G,          KC_H,          KC_J,          KC_K,          KC_L,          KC_DEL,        KC_INS,
-        KC_LALT,       KC_LSFT,       KC_Z,          KC_X,          KC_C,          KC_V,          KC_B,          KC_N,          KC_M,          KC_ESC,        KC_RCTL,       KC_RALT,
+        MACRO_2_PLAY,  KC_A,          KC_S,          KC_D,          KC_F,          KC_G,          KC_H,          KC_J,          KC_K,          KC_L,          KC_ESC,        KC_INS,
+        KC_LALT,       KC_LSFT,       KC_Z,          KC_X,          KC_C,          KC_V,          KC_B,          KC_N,          KC_M,          KC_DEL,        KC_RCTL,       KC_RALT,
                                       KC_DEL,        KC_ENT,                                                                    NORMAL_MODE,   MAC_MODE,
                                                                     KC_THUMB_L1,   KC_THUMB_L0,   KC_THUMB_R0,   KC_THUMB_R1,
                                                                     KC_LGUI,       MO(_MOUSE),    OSL(_UMLAUT),  TO(_MOUSE),
