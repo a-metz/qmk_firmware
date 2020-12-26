@@ -20,3 +20,4 @@ RGBLIGHT_ENABLE = no       # Enable WS2812 RGB underlight.
 SLEEP_LED_ENABLE = no    # Breathing sleep LED during USB suspend
 
 DYNAMIC_MACRO_ENABLE = yes
+OLED_DRIVER_ENABLE = yes

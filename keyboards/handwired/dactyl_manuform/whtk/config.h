@@ -39,6 +39,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGB_DI_PIN D3
 #define RGBLED_NUM 12
 
+#ifdef OLED_DRIVER_ENABLE
+  #define OLED_DISPLAY_128X64
+#endif
+
+#define SOFT_SERIAL_PIN D2
+
+
 /* define if matrix has ghost */
 //#define MATRIX_HAS_GHOST
 
