@@ -1,16 +1,6 @@
 #pragma once
 
-#include "whtk.h"
 #include "quantum.h"
-
-
-#ifdef USE_I2C
-#include <stddef.h>
-#ifdef __AVR__
-    #include <avr/io.h>
-    #include <avr/interrupt.h>
-#endif
-#endif
 
 
 #define LAYOUT_WHTK(\
@@ -75,6 +65,10 @@ void shift_all_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modde
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation);
 
+void render_test(void);
+
 void render_qmk_logo(void);
+
+void render_anim(void);
 
 #endif

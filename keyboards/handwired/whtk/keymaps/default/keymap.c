@@ -18,11 +18,19 @@
 #define KC_PREV_TAB LCTL(KC_PGUP)
 #define KC_NEXT_TAB LCTL(KC_PGDN)
 
-#define MACRO_1_PLAY DYN_MACRO_PLAY1
-#define MACRO_1_REC DYN_REC_START1
-#define MACRO_2_PLAY DYN_MACRO_PLAY2
-#define MACRO_2_REC DYN_REC_START2
-#define MACRO_REC_STOP DYN_REC_STOP
+#ifdef DYNAMIC_MACRO_ENABLE
+#   define MACRO_1_PLAY DYN_MACRO_PLAY1
+#   define MACRO_1_REC DYN_REC_START1
+#   define MACRO_2_PLAY DYN_MACRO_PLAY2
+#   define MACRO_2_REC DYN_REC_START2
+#   define MACRO_REC_STOP DYN_REC_STOP
+#else
+#   define MACRO_1_PLAY KC_NO
+#   define MACRO_1_REC KC_NO
+#   define MACRO_2_PLAY KC_NO
+#   define MACRO_2_REC KC_NO
+#   define MACRO_REC_STOP KC_NO
+#endif
 
 enum custom_keycodes {
     NORMAL_MODE = SAFE_RANGE,
@@ -43,10 +51,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                       KC_DEL,        KC_ENT,                                                                    NORMAL_MODE,   MAC_MODE,
                                                                     KC_THUMB_L1,   KC_THUMB_L0,   KC_THUMB_R0,   KC_THUMB_R1,
                                                                     KC_LGUI,       MO(_MOUSE),    OSL(_UMLAUT),  TO(_MOUSE),
-                                                                    LSFT(KC_LGUI), SH_TG,         TO(_NUMERIC),  TO(_FUNC)
+                                                                    LSFT(KC_LGUI), KC_NO,         TO(_NUMERIC),  TO(_FUNC)
     ),
     [_FUNC] = LAYOUT_WHTK(
-        DYN_REC_STOP,  KC_NO,         KC_AT,         KC_LT,         KC_GT,         KC_CIRC,       KC_PREV_TAB,   KC_NEXT_TAB,   KC_NO,         KC_NO,         KC_MUTE,       KC_NO,
+        MACRO_REC_STOP,KC_NO,         KC_AT,         KC_LT,         KC_GT,         KC_CIRC,       KC_PREV_TAB,   KC_NEXT_TAB,   KC_NO,         KC_NO,         KC_MUTE,       KC_NO,
         MACRO_1_REC,   KC_NO,         KC_HASH,       KC_LCBR,       KC_RCBR,       KC_ASTR,       KC_PGUP,       KC_PREV_WORD,  KC_UP,         KC_NEXT_WORD,  KC_NO,         KC_PAUS,
         MACRO_2_REC,   KC_NO,         KC_DLR,        KC_LPRN,       KC_RPRN,       KC_AMPR,       KC_PGDN,       KC_LEFT,       KC_DOWN,       KC_RGHT,       KC_NO,         KC_SLCK,
         KC_TRNS,       KC_TRNS,       KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,       KC_HOME,       KC_HOME,       KC_NO,         KC_END,        KC_TRNS,       KC_TRNS,
@@ -87,7 +95,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 
-const keypos_t hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = MIRROR_WHTK;
+// const keypos_t hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = MIRROR_WHTK;
 
 
 //////////// Custom keycodes //////////
@@ -208,12 +216,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 #ifdef OLED_DRIVER_ENABLE
 
 static void render_status(void) {
-    PORTD |= 0b11;
-
-    // QMK Logo and version information
-    render_qmk_logo();
-    oled_write_P(PSTR("Whtk rev1.0\n\n"), false);
-
     // Host Keyboard Layer Status
     oled_write_P(PSTR("Layer: "), false);
     switch (get_highest_layer(layer_state)) {
@@ -238,7 +240,12 @@ static void render_status(void) {
 }
 
 void oled_task_user(void) {
-    render_status(); // Renders the current keyboard state
+    if (is_keyboard_master()) {
+        render_anim();
+        oled_set_cursor(0, 7);
+        render_status();
+        // render_test();
+    }
 }
 
 #endif

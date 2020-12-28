@@ -20,14 +20,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "config_common.h"
 
-#define PRODUCT_ID      0x3536
+#define VENDOR_ID       0xFEED
+#define PRODUCT_ID      0x0000
 #define DEVICE_VER      0x0001
-#define PRODUCT         whtk
-
-/* USB Device descriptor parameter */
-#define VENDOR_ID       0x444D
 #define MANUFACTURER    whtk
-// defined in subfolder
+#define PRODUCT         whtk
 #define DESCRIPTION     My split keyboard
 
 /* mouse config */
