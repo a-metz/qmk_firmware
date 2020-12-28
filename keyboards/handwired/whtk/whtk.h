@@ -1,15 +1,17 @@
 #pragma once
 
-#include "dactyl_manuform.h"
+#include "whtk.h"
 #include "quantum.h"
+
 
 #ifdef USE_I2C
 #include <stddef.h>
 #ifdef __AVR__
-  #include <avr/io.h>
-  #include <avr/interrupt.h>
+    #include <avr/io.h>
+    #include <avr/interrupt.h>
 #endif
 #endif
+
 
 #define LAYOUT_WHTK(\
   L00, L01, L02, L03, L04, L05,                          R00, R01, R02, R03, R04, R05, \
@@ -52,3 +54,27 @@
     {{5,  4}, {4,  4}, {3,  4}, {2,  4}, {1,  4}, {0,  4}}, \
     {{5,  5}, {4,  5}, {3,  5}, {2,  5}, {1,  5}, {0,  5}}, \
   }
+
+
+////////// Utilities for alternative shifted keycodes //////////
+bool check_mod_and_clear(uint16_t mod_keycode);
+
+void mod_set(uint16_t mod_keycode);
+
+void mod_clear(uint16_t mod_keycode);
+
+void mod_restore(uint16_t mod_keycode);
+
+void shift_cleared_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycode);
+
+void shift_all_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycode);
+
+
+////////// Utilities for OLED //////////
+#ifdef OLED_DRIVER_ENABLE
+
+oled_rotation_t oled_init_user(oled_rotation_t rotation);
+
+void render_qmk_logo(void);
+
+#endif

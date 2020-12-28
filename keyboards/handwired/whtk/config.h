@@ -22,7 +22,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define PRODUCT_ID      0x3536
 #define DEVICE_VER      0x0001
-#define PRODUCT         Dactyl-Manuform (whtk)
+#define PRODUCT         whtk
+
+/* USB Device descriptor parameter */
+#define VENDOR_ID       0x444D
+#define MANUFACTURER    whtk
+// defined in subfolder
+#define DESCRIPTION     My split keyboard
+
+/* mouse config */
+#define MOUSEKEY_INTERVAL       20
+#define MOUSEKEY_DELAY          0
+#define MOUSEKEY_TIME_TO_MAX    60
+#define MOUSEKEY_MAX_SPEED      7
+#define MOUSEKEY_WHEEL_DELAY 0
+
+/* Set 0 if debouncing isn't needed */
+#define DEBOUNCE 5
+
+/* serial.c configuration for split keyboard */
+#define SOFT_SERIAL_PIN D2
+
+/* Mechanical locking support. Use KC_LCAP, KC_LNUM or KC_LSCR instead in keymap */
+#define LOCKING_SUPPORT_ENABLE
+/* Locking resynchronize hack */
+#define LOCKING_RESYNC_ENABLE
+
+/* Enables This makes it easier for fast typists to use dual-function keys */
+#define PERMISSIVE_HOLD
 
 /* key matrix size */
 // Rows are doubled-up
@@ -35,19 +62,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define DIODE_DIRECTION COL2ROW
 
-// WS2812 RGB LED strip input and number of LEDs
-#define RGB_DI_PIN D3
-#define RGBLED_NUM 12
-
 #ifdef OLED_DRIVER_ENABLE
   #define OLED_DISPLAY_128X64
 #endif
-
-#define SOFT_SERIAL_PIN D2
-
-
-/* define if matrix has ghost */
-//#define MATRIX_HAS_GHOST
-
-/* number of backlight levels */
-// #define BACKLIGHT_LEVELS 3
