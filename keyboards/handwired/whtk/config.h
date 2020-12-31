@@ -60,5 +60,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DIODE_DIRECTION COL2ROW
 
 #ifdef OLED_DRIVER_ENABLE
-  #define OLED_DISPLAY_128X64
+#   define OLED_DISPLAY_128X64
+#endif
+
+#ifdef PS2_USE_INT
+#   ifdef OLED_DRIVER_ENABLE
+#       error "Cannot use PS2 while OLED is enabled"
+#   endif
+
+#   define PS2_CLOCK_PORT  PORTD
+#   define PS2_CLOCK_PIN   PIND
+#   define PS2_CLOCK_DDR   DDRD
+#   define PS2_CLOCK_BIT   0
+#   define PS2_DATA_PORT   PORTD
+#   define PS2_DATA_PIN    PIND
+#   define PS2_DATA_DDR    DDRD
+#   define PS2_DATA_BIT    1
+
+#   define PS2_INT_INIT() do {      \
+        EICRA |= ((1<<ISC01) |      \
+                  (0<<ISC00));      \
+    } while (0)
+    #define PS2_INT_ON()  do {      \
+        EIMSK |= (1<<INT0);         \
+    } while (0)
+    #define PS2_INT_OFF() do {      \
+        EIMSK &= ~(1<<INT0);        \
+    } while (0)
+#   define PS2_INT_VECT   INT0_vect
 #endif
