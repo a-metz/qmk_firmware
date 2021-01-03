@@ -36,7 +36,8 @@ DYNAMIC_MACRO_ENABLE = no
 WPM_ENABLE = yes
 
 # Enable for left side
-OLED_DRIVER_ENABLE = no
+#OLED_DRIVER_ENABLE = yes
+#SRC += display.c
 
 # Enable for right side
 PS2_MOUSE_ENABLE = yes
