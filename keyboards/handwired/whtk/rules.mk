@@ -33,15 +33,20 @@ UNICODE_ENABLE = no         # Unicode
 BLUETOOTH_ENABLE = no       # Enable Bluetooth with the Adafruit EZ-Key HID
 RGBLIGHT_ENABLE = no        # Enable WS2812 RGB underlight.
 DYNAMIC_MACRO_ENABLE = no
-WPM_ENABLE = yes
-
-# Enable for left side
-#OLED_DRIVER_ENABLE = yes
-#SRC += display.c
-
-# Enable for right side
-PS2_MOUSE_ENABLE = yes
-PS2_USE_INT = yes
-
+WPM_ENABLE = no
 # Do not enable SLEEP_LED_ENABLE. it uses the same timer as BACKLIGHT_ENABLE
 SLEEP_LED_ENABLE = no    # Breathing sleep LED during USB suspend
+
+SPLIT_TRANSPORT = custom
+QUANTUM_SRC += transport_custom.c
+QUANTUM_LIB_SRC += serial.c
+
+# Enable for left side
+OLED_DRIVER_ENABLE = yes
+SRC += display.c
+
+# Enable for right side
+#PS2_MOUSE_ENABLE = yes
+#PS2_USE_INT = yes
+
+
