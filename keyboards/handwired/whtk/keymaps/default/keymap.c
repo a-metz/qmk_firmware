@@ -1,6 +1,10 @@
 #include QMK_KEYBOARD_H
 #include "whtk.h"
 
+#ifdef OLED_DRIVER_ENABLE
+#   include "display.h"
+#endif
+
 #define _ALPHA 0
 #define _FUNC 1
 #define _MOUSE 2
@@ -156,6 +160,11 @@ bool process_record_user_shift_alternative(uint16_t keycode, keyrecord_t *record
 
 ////////// Process key stroke //////////
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+#ifdef OLED_DRIVER_ENABLE
+        register_keypress(record->event.pressed);
+#endif
+
     return process_record_user_mac_mode(keycode, record) &&
            process_record_user_custom(keycode, record) &&
            process_record_user_shift_alternative(keycode, record);
@@ -182,8 +191,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 ////////// Render status on OLED //////////
 #ifdef OLED_DRIVER_ENABLE
-
-#include "display.h"
 
 static void render_status(void) {
     // Host Keyboard Layer Status

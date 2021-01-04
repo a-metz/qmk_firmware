@@ -7,3 +7,5 @@ void render_test(void);
 void render_qmk_logo(void);
 
 void render_anim(void);
+
+void register_keypress(bool keydown);
