@@ -1,4 +1,5 @@
 #include "whtk.h"
+#include "quantum.h"
 
 
 void matrix_init_kb(void) {
@@ -62,4 +63,29 @@ void shift_all_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modde
         unregister_code(keycode);
         unregister_code(modded_keycode);
     }
+}
+
+
+////////// Synchronized state between keyboard sides //////////
+keyboard_state_t state = {.keypress_count = 0, .active_layer = 0};
+
+void set_keyboard_state(keyboard_state_t state_) {
+    state = state_;
+}
+
+keyboard_state_t get_keyboard_state(void) {
+    return state;
+}
+
+bool keyboard_state_equal(keyboard_state_t a, keyboard_state_t b) {
+    return a.keypress_count == b.keypress_count &&
+           a.active_layer == b.active_layer;
+}
+
+void register_keypress(void) {
+    state.keypress_count++;
+}
+
+void update_active_layer_state(void) {
+    state.active_layer = get_highest_layer(layer_state);
 }

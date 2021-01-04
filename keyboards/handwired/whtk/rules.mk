@@ -11,6 +11,9 @@ MCU = atmega32u4
 #   ATmega328P   USBasp
 BOOTLOADER = caterina
 
+# Select which side of the keyboard to build
+SIDE = left
+
 # Build Options
 #   change to "no" to disable the options, or define them in the Makefile in
 #   the appropriate keymap folder that will get included automatically
@@ -19,7 +22,7 @@ SPLIT_KEYBOARD = yes
 LTO_ENABLE = yes
 
 BOOTMAGIC_ENABLE = no       # Virtual DIP switch configuration(+1000)
-MOUSEKEY_ENABLE = yes       # Mouse keys(+4700)
+MOUSEKEY_ENABLE = no       # Mouse keys(+4700)
 EXTRAKEY_ENABLE = yes       # Audio control and System control(+450)
 CONSOLE_ENABLE = no         # Console for debug(+400)
 PRINT_ENABLE = no
@@ -39,14 +42,18 @@ SLEEP_LED_ENABLE = no    # Breathing sleep LED during USB suspend
 
 SPLIT_TRANSPORT = custom
 QUANTUM_SRC += transport_custom.c
+#QUANTUM_SRC += state.c
 QUANTUM_LIB_SRC += serial.c
 
-# Enable for left side
-OLED_DRIVER_ENABLE = yes
-SRC += display.c
 
-# Enable for right side
-#PS2_MOUSE_ENABLE = yes
-#PS2_USE_INT = yes
+ifeq ($(strip $(SIDE)), left)
+    # Enable display for left side
+    OLED_DRIVER_ENABLE = yes
+    SRC += display.c
+else ifeq ($(strip $(SIDE)), right)
+    # Enable mouse for right side
+    PS2_MOUSE_ENABLE = yes
+    PS2_USE_INT = yes
+endif
 
 

@@ -1,9 +1,5 @@
 #include "whtk.h"
 
-oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    return OLED_ROTATION_0;
-}
-
 void render_test(void) {
     static const char PROGMEM test[] = {
         255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,255,  0,
@@ -29,6 +25,7 @@ void render_qmk_logo(void) {
 
 //////////// Animation state machine //////////
 #define FRAME_SIZE 636
+#define FRAME_TIMEOUT 300
 
 enum anim_state_t {
     IDLE_0,
@@ -44,8 +41,11 @@ enum anim_state_t {
 };
 
 enum anim_state_t anim_state = IDLE_0;
+uint32_t last_event = 0;
 
-void idle_event(void) {
+void frame_timeout_event(void) {
+    last_event = timer_read32();
+
     switch (anim_state) {
         case IDLE_0:
         case IDLE_1:
@@ -65,15 +65,19 @@ void idle_event(void) {
    }
 }
 
-void keypress_event(void) {
+void keypress_event(uint8_t keypress_count) {
+    last_event = timer_read32();
+
     switch (anim_state) {
         case IDLE_0:
         case IDLE_1:
         case IDLE_2:
         case IDLE_3:
         case PAUSE:
-        case TAP_1:
         default:
+            anim_state = TAP_0 + (keypress_count & 0b1);
+            break;
+        case TAP_1:
             anim_state = TAP_0;
             break;
         case TAP_0:
@@ -152,36 +156,70 @@ static const char PROGMEM anim_frames[NUM_STATES][FRAME_SIZE] = {
 };
 
 
-//////////// Animation handling //////////
-#define STATE_TIMEOUT 200
-#define STANDBY_TIMEOUT 10000
+//////////// Animation rendering //////////
 
-uint32_t last_event = 0;
-uint32_t last_keypress = 0;
+enum anim_state_t last_rendered_anim_state = NUM_STATES;
 
-void register_keypress(bool keydown) {
-    if (keydown) {
-        last_keypress = timer_read32();
-        last_event = last_keypress;
-        keypress_event();
+void render_anim(void) {
+    if(timer_elapsed32(last_event) > FRAME_TIMEOUT) {
+        frame_timeout_event();
+    }
+
+    if (last_rendered_anim_state != anim_state) {
+        oled_write_raw_P(anim_frames[anim_state], FRAME_SIZE);
+        last_rendered_anim_state = anim_state;
     }
 }
 
-enum anim_state_t last_rendered_state = NUM_STATES;
+//////////// Main display handling //////////
+#define STANDBY_TIMEOUT 30000
 
-void render_anim(void) {
-    if(timer_elapsed32(last_keypress) > STANDBY_TIMEOUT) {
+keyboard_state_t last_keyboard_state = {.keypress_count = 0, .active_layer = 255};
+uint32_t last_keyboard_state_change = 0;
+
+void render_layer(keyboard_state_t keyboard_state) {
+    // Host Keyboard Layer Status
+    oled_set_cursor(0, 7);
+    oled_write_P(PSTR("Layer: "), false);
+    switch (keyboard_state.active_layer) {
+        case LAYER_ALPHA:
+            oled_write_P(PSTR("Alpha\n"), false);
+            break;
+        case LAYER_FUNC:
+            oled_write_P(PSTR("Func\n"), false);
+            break;
+        case LAYER_MOUSE:
+            oled_write_P(PSTR("Mouse\n"), false);
+            break;
+        case LAYER_NUMERIC:
+            oled_write_P(PSTR("Numeric\n"), false);
+            break;
+        case LAYER_UMLAUT:
+            oled_write_P(PSTR("Umlaut\n"), false);
+            break;
+        default:
+            oled_write_P(PSTR("Undefined\n"), false);
+    }
+}
+
+void oled_task_user(void) {
+    keyboard_state_t keyboard_state = get_keyboard_state();
+    if (!keyboard_state_equal(keyboard_state, last_keyboard_state)) {
+        if (keyboard_state.keypress_count != last_keyboard_state.keypress_count) {
+            last_event = timer_read32();
+            keypress_event(keyboard_state.keypress_count);
+        }
+
+        last_keyboard_state = get_keyboard_state();
+        last_keyboard_state_change = timer_read32();
+        render_layer(keyboard_state);
+    }
+
+    if(timer_elapsed32(last_keyboard_state_change) > STANDBY_TIMEOUT) {
         oled_off();
         return;
     }
 
-    if(timer_elapsed32(last_event) > STATE_TIMEOUT) {
-        last_event = timer_read32();
-        idle_event();
-    }
-
-    if (last_rendered_state != anim_state) {
-        oled_write_raw_P(anim_frames[anim_state], FRAME_SIZE);
-        last_rendered_state = anim_state;
-    }
+    render_anim();
+    // render_test();
 }

@@ -21,6 +21,8 @@ static pin_t encoders_pad[] = ENCODERS_PAD_A;
 #    define NUMBER_OF_ENCODERS (sizeof(encoders_pad) / sizeof(pin_t))
 #endif
 
+#include "whtk.h"
+
 #if defined(USE_I2C)
 #    error "I2C not supported"
 #else  // USE_SERIAL
@@ -44,6 +46,9 @@ typedef struct _Serial_m2s_buffer_t {
 #    ifdef WPM_ENABLE
     uint8_t current_wpm;
 #    endif
+
+    keyboard_state_t keyboard_state;
+
 } Serial_m2s_buffer_t;
 
 #    if defined(RGBLIGHT_ENABLE) && defined(RGBLIGHT_SPLIT)
@@ -150,6 +155,10 @@ bool transport_master(matrix_row_t matrix[]) {
     // Write wpm to slave
     serial_m2s_buffer.current_wpm = get_current_wpm();
 #    endif
+
+    update_active_layer_state();
+    serial_m2s_buffer.keyboard_state = get_keyboard_state();
+
     return true;
 }
 
@@ -170,6 +179,8 @@ void transport_slave(matrix_row_t matrix[]) {
 #    ifdef WPM_ENABLE
     set_current_wpm(serial_m2s_buffer.current_wpm);
 #    endif
+
+    set_keyboard_state(serial_m2s_buffer.keyboard_state);
 }
 
 #endif
