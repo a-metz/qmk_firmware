@@ -49,6 +49,7 @@ void shift_all_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modde
 typedef struct _keyboard_state_t {
     uint8_t keypress_count;
     layer_t active_layer;
+    uint8_t modifiers;
 } keyboard_state_t;
 
 void set_keyboard_state(keyboard_state_t);
@@ -59,4 +60,4 @@ bool keyboard_state_equal(keyboard_state_t a, keyboard_state_t b);
 
 void register_keypress(void);
 
-void update_active_layer_state(void);
+void update_keyboard_state(void);

@@ -156,7 +156,7 @@ bool transport_master(matrix_row_t matrix[]) {
     serial_m2s_buffer.current_wpm = get_current_wpm();
 #    endif
 
-    update_active_layer_state();
+    update_keyboard_state();
     serial_m2s_buffer.keyboard_state = get_keyboard_state();
 
     return true;

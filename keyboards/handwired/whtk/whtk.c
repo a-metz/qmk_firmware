@@ -79,13 +79,15 @@ keyboard_state_t get_keyboard_state(void) {
 
 bool keyboard_state_equal(keyboard_state_t a, keyboard_state_t b) {
     return a.keypress_count == b.keypress_count &&
-           a.active_layer == b.active_layer;
+           a.active_layer == b.active_layer &&
+           a.modifiers == b.modifiers;
 }
 
 void register_keypress(void) {
     state.keypress_count++;
 }
 
-void update_active_layer_state(void) {
+void update_keyboard_state(void) {
     state.active_layer = get_highest_layer(layer_state);
+    state.modifiers = get_mods();
 }
