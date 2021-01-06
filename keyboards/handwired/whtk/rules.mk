@@ -49,6 +49,7 @@ QUANTUM_LIB_SRC += serial.c
 ifeq ($(strip $(SIDE)), left)
     # Enable display for left side
     OLED_DRIVER_ENABLE = yes
+    SRC += bitmaps.c
     SRC += display.c
 else ifeq ($(strip $(SIDE)), right)
     # Enable mouse for right side

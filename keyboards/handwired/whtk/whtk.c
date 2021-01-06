@@ -65,9 +65,13 @@ void shift_all_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modde
     }
 }
 
-
 ////////// Synchronized state between keyboard sides //////////
-keyboard_state_t state = {.keypress_count = 0, .active_layer = 0};
+keyboard_state_t state = {
+    .keypress_count = 0,
+    .active_layer = LAYER_ALPHA,
+    .modifiers = 0,
+    .mode = MODE_LINUX
+};
 
 void set_keyboard_state(keyboard_state_t state_) {
     state = state_;
@@ -80,7 +84,8 @@ keyboard_state_t get_keyboard_state(void) {
 bool keyboard_state_equal(keyboard_state_t a, keyboard_state_t b) {
     return a.keypress_count == b.keypress_count &&
            a.active_layer == b.active_layer &&
-           a.modifiers == b.modifiers;
+           a.modifiers == b.modifiers &&
+           a.mode == b.mode;
 }
 
 void register_keypress(void) {
@@ -90,4 +95,12 @@ void register_keypress(void) {
 void update_keyboard_state(void) {
     state.active_layer = get_highest_layer(layer_state);
     state.modifiers = get_mods();
+}
+
+void set_mode(mode_t mode) {
+    state.mode = mode;
+}
+
+mode_t get_mode(void) {
+    return state.mode;
 }

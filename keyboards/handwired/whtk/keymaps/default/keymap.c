@@ -1,9 +1,9 @@
 #include QMK_KEYBOARD_H
 #include "whtk.h"
 
-#define KC_THUMB_L0 LT(LAYER_FUNC, KC_SPC)
+#define KC_THUMB_L0 LT(LAYER_SYM_NAV, KC_SPC)
 #define KC_THUMB_L1 LCTL_T(KC_TAB)
-#define KC_THUMB_R0 LT(LAYER_NUMERIC, KC_ENT)
+#define KC_THUMB_R0 LT(LAYER_FUN_NUM, KC_ENT)
 #define KC_THUMB_R1 RSFT_T(KC_BSPC)
 #define KC_THUMB_R1_F RSFT_T(KC_DEL)
 
@@ -21,8 +21,9 @@
 #endif
 
 enum custom_keycodes {
-    NORMAL_MODE = SAFE_RANGE,
-    MAC_MODE,
+    TOGGLE_MODE = SAFE_RANGE,
+    SWITCH_LINUX,
+    SWITCH_MAC,
     KC_DOT_COMM,
     KC_EXLM_QUES,
     KC_SLSH_BSLS,
@@ -36,18 +37,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         MACRO_2_PLAY,  KC_A,          KC_Z,          KC_X,          KC_C,          KC_V,                         KC_B,          KC_N,          KC_M,          KC_DEL,        KC_ESC,        KC_INS,
         KC_LALT,       KC_LSFT,                      KC_THUMB_L1,   KC_THUMB_L0,   KC_LGUI,                  OSL(LAYER_UMLAUT), KC_THUMB_R0,   KC_THUMB_R1,                  KC_RCTL,       KC_RALT
     ),
-    [LAYER_FUNC] = LAYOUT_WHTK(
+    [LAYER_SYM_NAV] = LAYOUT_WHTK(
                                       KC_AT,         KC_LT,         KC_GT,         KC_CIRC,                      KC_PREV_TAB,   KC_NEXT_TAB,   KC_NO,         KC_NO,
                                       KC_HASH,       KC_LCBR,       KC_RCBR,       KC_ASTR,                      KC_PGUP,       KC_PREV_WORD,  KC_UP,         KC_NEXT_WORD,
         RESET,         KC_NO,         KC_DLR,        KC_LPRN,       KC_RPRN,       KC_AMPR,                      KC_PGDN,       KC_LEFT,       KC_DOWN,       KC_RGHT,       KC_NO,         KC_PAUS,
-        KC_NO,         KC_NO,         KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,                      KC_HOME,       KC_HOME,       KC_NO,         KC_END,        KC_NO,         KC_SLCK,
+        TOGGLE_MODE,   KC_NO,         KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,                      KC_HOME,       KC_HOME,       KC_NO,         KC_END,        KC_NO,         KC_SLCK,
         KC_TRNS,       KC_TRNS,                      KC_TRNS,       KC_TRNS,       KC_TRNS,                      KC_TRNS,       KC_TRNS,       KC_THUMB_R1_F,                KC_TRNS,       KC_TRNS
     ),
-    [LAYER_NUMERIC] = LAYOUT_WHTK(
+    [LAYER_FUN_NUM] = LAYOUT_WHTK(
                                       KC_NO,         KC_NO,         KC_NO,         KC_NO,                        KC_COMM,       KC_DOT,        KC_NO,         KC_NO,
                                       KC_F1,         KC_F2,         KC_F3,         KC_F4,                        KC_0,          KC_1,          KC_2,          KC_3,
         MACRO_1_REC,  MACRO_REC_STOP, KC_F5,         KC_F6,         KC_F7,         KC_F8,                        KC_NO,         KC_4,          KC_5,          KC_6,          KC_NO,         RESET,
-        MACRO_2_REC,  MACRO_REC_STOP, KC_F9,         KC_F10,        KC_F11,        KC_F12,                       KC_NO,         KC_7,          KC_8,          KC_9,          KC_NO,         KC_NO,
+        MACRO_2_REC,  MACRO_REC_STOP, KC_F9,         KC_F10,        KC_F11,        KC_F12,                       KC_NO,         KC_7,          KC_8,          KC_9,          KC_NO,         TOGGLE_MODE,
         KC_TRNS,       KC_TRNS,                      KC_TRNS,       KC_TRNS,       KC_TRNS,                      KC_TRNS,       KC_TRNS,       KC_TRNS,                      KC_TRNS,       KC_TRNS
     ),
     [LAYER_UMLAUT] = LAYOUT_WHTK(
@@ -79,27 +80,24 @@ bool process_record_user_custom(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-////////// Mac mode alternatives //////////
-bool mac_mode = false;
-
-bool process_record_user_mac_mode(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case NORMAL_MODE:
-            mac_mode = false;
+////////// Mode alternatives //////////
+bool process_record_user_mode(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed) {
+        if (keycode == SWITCH_LINUX || (keycode == TOGGLE_MODE && get_mode() == MODE_MAC)) {
+            set_mode(MODE_LINUX);
             keymap_config.swap_lctl_lgui = false;
             return false;
+        }
 
-        case MAC_MODE:
-            mac_mode = true;
+        if (keycode == SWITCH_MAC || (keycode == TOGGLE_MODE && get_mode() == MODE_LINUX)) {
+            set_mode(MODE_MAC);
             keymap_config.swap_lctl_lgui = true;
             return false;
-
-        default:
-            break;
+        }
     }
 
-    // skip mac mode processing if it's not active
-    if (!mac_mode) {
+    // skip keycode remapping for linux mode
+    if (get_mode() == MODE_LINUX) {
         return true;
     }
 
@@ -155,7 +153,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         register_keypress();
     }
 
-    return process_record_user_mac_mode(keycode, record) &&
+    return process_record_user_mode(keycode, record) &&
            process_record_user_custom(keycode, record) &&
            process_record_user_shift_alternative(keycode, record);
 }

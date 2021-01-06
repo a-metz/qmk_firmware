@@ -26,11 +26,15 @@
 
 typedef enum _layer_t {
     LAYER_ALPHA = 0,
-    LAYER_FUNC,
-    LAYER_MOUSE,
-    LAYER_NUMERIC,
+    LAYER_SYM_NAV,
+    LAYER_FUN_NUM,
     LAYER_UMLAUT
 } layer_t;
+
+typedef enum _mode_t {
+    MODE_LINUX = 0,
+    MODE_MAC,
+} mode_t;
 
 ////////// Utilities for alternative shifted keycodes //////////
 bool check_mod_and_clear(uint16_t mod_keycode);
@@ -50,6 +54,7 @@ typedef struct _keyboard_state_t {
     uint8_t keypress_count;
     layer_t active_layer;
     uint8_t modifiers;
+    mode_t mode;
 } keyboard_state_t;
 
 void set_keyboard_state(keyboard_state_t);
@@ -61,3 +66,7 @@ bool keyboard_state_equal(keyboard_state_t a, keyboard_state_t b);
 void register_keypress(void);
 
 void update_keyboard_state(void);
+
+void set_mode(mode_t);
+
+mode_t get_mode(void);
