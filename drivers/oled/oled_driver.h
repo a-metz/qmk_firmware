@@ -415,11 +415,14 @@ void oled_write_ln_P(const char *data, bool invert);
 
 // Writes a PROGMEM string to the buffer at current cursor position
 void oled_write_raw_P(const char *data, uint16_t size);
+
 #else
 #    define oled_write_P(data, invert) oled_write(data, invert)
 #    define oled_write_ln_P(data, invert) oled_write_ln(data, invert)
 #    define oled_write_raw_P(data, size) oled_write_raw(data, size)
 #endif // defined(__AVR__)
+
+void oled_write_raw_rect(const char *data, uint8_t left, uint8_t top, uint8_t width, uint8_t height);
 
 // Can be used to manually turn on the screen if it is off
 // Returns true if the screen was on or turns on
