@@ -519,6 +519,35 @@ void oled_write_raw_P(const char *data, uint16_t size) {
         oled_dirty |= ((OLED_BLOCK_TYPE)1 << (i / OLED_BLOCK_SIZE));
     }
 }
+
+void oled_write_raw_rect_P(const char *data, uint8_t left, uint8_t top, uint8_t width, uint8_t height) {
+    if (left >= OLED_DISPLAY_WIDTH || top >= OLED_DISPLAY_HEIGHT / 8) {
+        return;
+    }
+
+    // right and bottom are last index + 1
+    uint8_t right = left + width;
+    uint8_t bottom = top + height;
+
+    // cut off out of bounds values for safe iteration
+    if (right > OLED_DISPLAY_WIDTH) {
+        right = OLED_DISPLAY_WIDTH;
+    }
+    if (bottom > OLED_DISPLAY_HEIGHT / 8) {
+        bottom = OLED_DISPLAY_HEIGHT / 8;
+    }
+
+    for (uint8_t y = top; y < bottom; y++) {
+        uint16_t y_offset = (uint16_t)y * OLED_DISPLAY_WIDTH;
+        for (uint16_t x = left; x < right; x++) {
+            uint16_t i = x + y_offset;
+            uint8_t c = pgm_read_byte(data++);
+            if (oled_buffer[i] == c) continue;
+            oled_buffer[i] = c;
+            oled_dirty |= ((OLED_BLOCK_TYPE)1 << (i / OLED_BLOCK_SIZE));
+        }
+    }
+}
 #endif  // defined(__AVR__)
 
 bool oled_on(void) {

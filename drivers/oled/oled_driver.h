@@ -240,6 +240,8 @@ void oled_write_P(const char *data, bool invert);
 void oled_write_ln_P(const char *data, bool invert);
 
 void oled_write_raw_P(const char *data, uint16_t size);
+
+void oled_write_raw_rect_P(const char *data, uint8_t left, uint8_t top, uint8_t width, uint8_t height);
 #else
 // Writes a string to the buffer at current cursor position
 // Advances the cursor while writing, inverts the pixels if true
