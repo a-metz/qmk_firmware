@@ -90,12 +90,13 @@ void render_anim(keyboard_state_t keyboard_state) {
 
 //////////// Main display handling //////////
 #define STANDBY_TIMEOUT 30000
+#define NUM_COLUMNS OLED_DISPLAY_WIDTH / OLED_FONT_WIDTH
 
 keyboard_state_t last_keyboard_state = {.keypress_count = 0, .active_layer = 255};
 uint32_t last_keyboard_state_change = 0;
 
 void render_modifiers(keyboard_state_t keyboard_state) {
-    oled_set_cursor(2, 0);
+    oled_set_cursor(0, 0);
 
     if (!keyboard_state.modifiers) {
         oled_write_P(PSTR("\n"), false);
@@ -105,8 +106,9 @@ void render_modifiers(keyboard_state_t keyboard_state) {
     bool ctrl = keyboard_state.modifiers & MOD_MASK_CTRL;
     bool alt = keyboard_state.modifiers & MOD_MASK_ALT;
     bool shift = keyboard_state.modifiers & MOD_MASK_SHIFT;
-    bool gui = keyboard_state.modifiers & MOD_MASK_GUI;
-    uint8_t padding = (!ctrl + !alt  + !shift + !gui) * 2;
+    bool super = keyboard_state.modifiers & MOD_MASK_GUI;
+    uint8_t length = (ctrl * 5) + (alt * 4) + (shift * 6) + (super * 6) - 1;
+    uint8_t padding = (NUM_COLUMNS - length + 1) / 2;
 
     for (uint8_t i = 0; i < padding; i++) {
         oled_write_P(PSTR(" "), false);
@@ -114,7 +116,7 @@ void render_modifiers(keyboard_state_t keyboard_state) {
     if (ctrl) oled_write_P(PSTR("CTRL "), false);
     if (alt) oled_write_P(PSTR("ALT "), false);
     if (shift) oled_write_P(PSTR("SHIFT "), false);
-    if (gui) oled_write_P(PSTR("GUI"), false);
+    if (super) oled_write_P(PSTR("SUPER"), false);
     oled_write_P(PSTR("\n"), false);
 }
 
