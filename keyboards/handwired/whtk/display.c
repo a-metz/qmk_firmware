@@ -81,13 +81,9 @@ void keypress_event(uint8_t keypress_count) {
 //////////// Animation rendering //////////
 enum anim_state_t last_rendered_anim_state = NUM_STATES;
 
-void render_anim(void) {
-    if(timer_elapsed32(last_event) > ANIM_FRAME_TIMEOUT) {
-        frame_timeout_event();
-    }
-
-    if (last_rendered_anim_state != anim_state) {
-        oled_write_raw_rect_P(anim_frames[anim_state], 1, 2, ANIM_WIDTH, ANIM_HEIGHT);
+void render_anim(keyboard_state_t keyboard_state) {
+    if (keyboard_state.active_layer == LAYER_ALPHA) {
+        oled_write_raw_rect_P(anim_frames[anim_state], 10, 2, ANIM_WIDTH, ANIM_HEIGHT);
         last_rendered_anim_state = anim_state;
     }
 }
@@ -126,9 +122,9 @@ void render_layer(keyboard_state_t keyboard_state) {
     // Host Keyboard Layer Status
     switch (keyboard_state.active_layer) {
         case LAYER_ALPHA:
-            oled_write_raw_rect_P(bitmap_alpha, 15, 1, LAYER_BITMAP_WIDTH, LAYER_BITMAP_HEIGHT);
+            // oled_write_raw_rect_P(bitmap_alpha, 15, 1, LAYER_BITMAP_WIDTH, LAYER_BITMAP_HEIGHT);
             oled_set_cursor(0, 7);
-            oled_write_P(PSTR("   Alpha \n"), false);
+            oled_write_P(PSTR("    Alpha \n"), false);
             break;
         case LAYER_SYM_NAV:
             // oled_write_raw_rect_P(bitmap_symbol, 0, 1, LAYER_BITMAP_WIDTH, LAYER_BITMAP_HEIGHT);
@@ -166,7 +162,7 @@ void render_mode(keyboard_state_t keyboard_state) {
     uint8_t left = 52;
 
     if (keyboard_state.active_layer == LAYER_ALPHA) {
-        left = 85;
+        left = 93;
     }
 
     switch (keyboard_state.mode) {
@@ -182,7 +178,9 @@ void render_mode(keyboard_state_t keyboard_state) {
 }
 
 void oled_task_user(void) {
+    bool redraw = false;
     keyboard_state_t keyboard_state = get_keyboard_state();
+
     if (!keyboard_state_equal(keyboard_state, last_keyboard_state)) {
         if (keyboard_state.keypress_count != last_keyboard_state.keypress_count) {
             last_event = timer_read32();
@@ -191,17 +189,22 @@ void oled_task_user(void) {
 
         last_keyboard_state = get_keyboard_state();
         last_keyboard_state_change = timer_read32();
-        oled_clear();
-        render_modifiers(keyboard_state);
-        render_layer(keyboard_state);
-        render_mode(keyboard_state);
+        redraw = true;
+    }
+
+    if(timer_elapsed32(last_event) > ANIM_FRAME_TIMEOUT) {
+        frame_timeout_event();
+        redraw = true;
     }
 
     if(timer_elapsed32(last_keyboard_state_change) > STANDBY_TIMEOUT) {
         oled_off();
-        return;
+    } else if (redraw) {
+        oled_clear();
+        render_modifiers(keyboard_state);
+        render_layer(keyboard_state);
+        render_mode(keyboard_state);
+        render_anim(keyboard_state);
     }
-
-    // render_anim();
     // render_test();
 }
