@@ -1,5 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "whtk.h"
+#include "ps2_mouse.h"
 
 #define KC_THUMB_L0 LT(LAYER_SYM_NAV, KC_SPC)
 #define KC_THUMB_L1 LCTL_T(KC_TAB)
@@ -175,3 +176,30 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return TAPPING_TERM;
     }
 }
+
+
+////////// Touchpad config //////////
+#ifdef PS2_MOUSE_ENABLE
+
+ps2_mouse_resolution_t current_resolution = PS2_MOUSE_8_COUNT_MM;
+
+void ps2_mouse_init_user(void) {
+    ps2_mouse_set_resolution(current_resolution);
+    // ps2_mouse_set_sample_rate(200);
+}
+
+void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    ps2_mouse_resolution_t new_resolution = current_resolution;
+    if (get_highest_layer(layer_state) == LAYER_SYM_NAV) {
+        new_resolution = PS2_MOUSE_2_COUNT_MM;
+    } else {
+        new_resolution = PS2_MOUSE_8_COUNT_MM;
+    }
+
+    if (new_resolution != current_resolution) {
+        ps2_mouse_set_resolution(new_resolution);
+        current_resolution = new_resolution;
+    }
+}
+
+#endif
