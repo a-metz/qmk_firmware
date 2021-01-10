@@ -12,7 +12,8 @@
 /* Set 0 if debouncing isn't needed */
 #define DEBOUNCE 5
 
-/* serial.c configuration for split keyboard */
+/* serial configuration for split keyboard */
+#define USE_SERIAL
 #define SOFT_SERIAL_PIN D2
 
 #define MASTER_RIGHT
@@ -35,7 +36,9 @@
 
 #ifdef OLED_DRIVER_ENABLE
 #   define OLED_DISPLAY_128X64
-#	define OLED_FONT_H "glcdfont_improved.c"
+// #   define OLED_IC OLED_IC_SH1106
+// #   define OLED_COLUMN_OFFSET 2
+#   define OLED_FONT_H "glcdfont_improved.c"
 #endif
 
 #ifdef PS2_USE_INT

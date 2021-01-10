@@ -12,7 +12,7 @@ MCU = atmega32u4
 BOOTLOADER = caterina
 
 # Select which side of the keyboard to build
-SIDE = left
+SIDE = right
 
 # Build Options
 #   change to "no" to disable the options, or define them in the Makefile in
@@ -42,7 +42,6 @@ SLEEP_LED_ENABLE = no    # Breathing sleep LED during USB suspend
 
 SPLIT_TRANSPORT = custom
 QUANTUM_SRC += transport_custom.c
-#QUANTUM_SRC += state.c
 QUANTUM_LIB_SRC += serial.c
 
 
@@ -55,6 +54,7 @@ else ifeq ($(strip $(SIDE)), right)
     # Enable mouse for right side
     PS2_MOUSE_ENABLE = yes
     PS2_USE_INT = yes
+#     PS2_USE_USART = yes
 endif
 
 
