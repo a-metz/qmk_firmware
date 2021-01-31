@@ -36,8 +36,8 @@
 
 #ifdef OLED_DRIVER_ENABLE
 #   define OLED_DISPLAY_128X64
-// #   define OLED_IC OLED_IC_SH1106
-// #   define OLED_COLUMN_OFFSET 2
+#   define OLED_IC OLED_IC_SH1106
+#   define OLED_COLUMN_OFFSET 2
 #   define OLED_FONT_H "glcdfont_improved.c"
 #endif
 
