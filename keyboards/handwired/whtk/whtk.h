@@ -55,6 +55,7 @@ typedef struct _keyboard_state_t {
     layer_t active_layer;
     uint8_t modifiers;
     mode_t mode;
+    bool legend;
 } keyboard_state_t;
 
 void set_keyboard_state(keyboard_state_t);
@@ -70,3 +71,7 @@ void update_keyboard_state(void);
 void set_mode(mode_t);
 
 mode_t get_mode(void);
+
+void set_legend(bool legend);
+
+bool get_legend(void);

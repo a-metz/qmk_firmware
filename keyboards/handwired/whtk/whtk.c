@@ -70,7 +70,8 @@ keyboard_state_t state = {
     .keypress_count = 0,
     .active_layer = LAYER_ALPHA,
     .modifiers = 0,
-    .mode = MODE_LINUX
+    .mode = MODE_LINUX,
+    .legend = false
 };
 
 void set_keyboard_state(keyboard_state_t state_) {
@@ -104,3 +105,12 @@ void set_mode(mode_t mode) {
 mode_t get_mode(void) {
     return state.mode;
 }
+
+void set_legend(bool legend) {
+    state.legend = legend;
+}
+
+bool get_legend(void) {
+    return state.legend;
+}
+

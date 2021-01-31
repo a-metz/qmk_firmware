@@ -76,10 +76,8 @@ void keypress_event(uint8_t keypress_count) {
 enum anim_state_t last_rendered_anim_state = NUM_STATES;
 
 void render_anim(keyboard_state_t keyboard_state) {
-    if (keyboard_state.active_layer == LAYER_ALPHA) {
-        oled_write_raw_rect_P(anim_frames[anim_state], 10, 2, ANIM_WIDTH, ANIM_HEIGHT);
-        last_rendered_anim_state = anim_state;
-    }
+    oled_write_raw_rect_P(anim_frames[anim_state], 10, 2, ANIM_WIDTH, ANIM_HEIGHT);
+    last_rendered_anim_state = anim_state;
 }
 
 //////////// Main display handling //////////
@@ -90,7 +88,7 @@ keyboard_state_t last_keyboard_state = {.keypress_count = 0, .active_layer = 255
 uint32_t last_keyboard_state_change = 0;
 
 void render_modifiers(keyboard_state_t keyboard_state) {
-    oled_set_cursor(0, 0);
+    oled_set_cursor(0, 7);
 
     if (!keyboard_state.modifiers) {
         oled_write_P(PSTR("\n"), false);
@@ -114,50 +112,10 @@ void render_modifiers(keyboard_state_t keyboard_state) {
     oled_write_P(PSTR("\n"), false);
 }
 
-void render_layer(keyboard_state_t keyboard_state) {
-    // Host Keyboard Layer Status
-    switch (keyboard_state.active_layer) {
-        case LAYER_ALPHA:
-            // oled_write_raw_rect_P(bitmap_alpha, 15, 1, LAYER_BITMAP_WIDTH, LAYER_BITMAP_HEIGHT);
-            oled_set_cursor(0, 7);
-            oled_write_P(PSTR("    Alpha \n"), false);
-            break;
-        case LAYER_SYM_NAV:
-            // oled_write_raw_rect_P(bitmap_symbol, 0, 1, LAYER_BITMAP_WIDTH, LAYER_BITMAP_HEIGHT);
-            oled_set_cursor(0, 2);
-            oled_write_P(PSTR(" @<>^ "), false);
-            oled_set_cursor(0, 3);
-            oled_write_P(PSTR(" #{}* "), false);
-            oled_set_cursor(0, 4);
-            oled_write_P(PSTR(" $()& "), false);
-            oled_set_cursor(0, 5);
-            oled_write_P(PSTR(" %[]| "), false);
-            oled_write_raw_rect_P(bitmap_nav, 90, 1, LAYER_BITMAP_WIDTH, LAYER_BITMAP_HEIGHT);
-            oled_set_cursor(0, 7);
-            oled_write_P(PSTR("Symbol          Nav\n"), false);
-            break;
-        case LAYER_FUN_NUM:
-            oled_write_raw_rect_P(bitmap_func, 0, 1, LAYER_BITMAP_WIDTH, LAYER_BITMAP_HEIGHT);
-            oled_write_raw_rect_P(bitmap_num, 90, 1, LAYER_BITMAP_WIDTH, LAYER_BITMAP_HEIGHT);
-            oled_set_cursor(0, 7);
-            oled_write_P(PSTR(" Func           Num\n"), false);
-            break;
-        case LAYER_UMLAUT:
-            oled_write_raw_rect_P(bitmap_alpha, 0, 1, LAYER_BITMAP_WIDTH, LAYER_BITMAP_HEIGHT);
-            oled_set_cursor(0, 7);
-            oled_write_P(PSTR("Umlaut\n"), false);
-            break;
-        default:
-            oled_set_cursor(0, 7);
-            oled_write_P(PSTR("Undefined\n"), false);
-        break;
-    }
-}
-
 void render_mode(keyboard_state_t keyboard_state) {
     uint8_t left = 52;
 
-    if (keyboard_state.active_layer == LAYER_ALPHA) {
+    if (keyboard_state.active_layer == LAYER_ALPHA || keyboard_state.active_layer == LAYER_UMLAUT) {
         left = 93;
     }
 
@@ -170,6 +128,57 @@ void render_mode(keyboard_state_t keyboard_state) {
             break;
         default:
             break;
+    }
+}
+
+void render_layer(keyboard_state_t keyboard_state) {
+    if (keyboard_state.legend) {
+        switch (keyboard_state.active_layer) {
+            case LAYER_ALPHA:
+            case LAYER_UMLAUT:
+                if (keyboard_state.modifiers & MOD_MASK_SHIFT) {
+                    oled_write_raw_rect_P(bitmap_alpha_shift_legend, 0, 0, LEGEND_BITMAP_WIDTH, LEGEND_BITMAP_HEIGHT);
+                } else {
+                    oled_write_raw_rect_P(bitmap_alpha_legend, 0, 0, LEGEND_BITMAP_WIDTH, LEGEND_BITMAP_HEIGHT);
+                }
+                break;
+            case LAYER_SYM_NAV:
+                    oled_write_raw_rect_P(bitmap_sym_nav_legend, 0, 0, LEGEND_BITMAP_WIDTH, LEGEND_BITMAP_HEIGHT);
+                break;
+            case LAYER_FUN_NUM:
+                    oled_write_raw_rect_P(bitmap_func_num_legend, 0, 0, LEGEND_BITMAP_WIDTH, LEGEND_BITMAP_HEIGHT);
+                break;
+            default:
+                break;
+        }
+    } else {
+        switch (keyboard_state.active_layer) {
+            case LAYER_ALPHA:
+                render_anim(keyboard_state);
+                oled_set_cursor(0, 0);
+                oled_write_P(PSTR("    Alpha \n"), false);
+                break;
+            case LAYER_SYM_NAV:
+                oled_write_raw_rect_P(bitmap_symbol, 0, 1, LAYER_BITMAP_WIDTH, LAYER_BITMAP_HEIGHT);
+                oled_write_raw_rect_P(bitmap_nav, 90, 1, LAYER_BITMAP_WIDTH, LAYER_BITMAP_HEIGHT);
+                oled_set_cursor(0, 0);
+                oled_write_P(PSTR("Symbol          Nav\n"), false);
+                break;
+            case LAYER_FUN_NUM:
+                oled_write_raw_rect_P(bitmap_func, 0, 1, LAYER_BITMAP_WIDTH, LAYER_BITMAP_HEIGHT);
+                oled_write_raw_rect_P(bitmap_num, 90, 1, LAYER_BITMAP_WIDTH, LAYER_BITMAP_HEIGHT);
+                oled_set_cursor(0, 0);
+                oled_write_P(PSTR(" Func           Num\n"), false);
+                break;
+            case LAYER_UMLAUT:
+                render_anim(keyboard_state);
+                oled_set_cursor(0, 0);
+                oled_write_P(PSTR("   Umlaut\n"), false);
+                break;
+            default:
+                break;
+        }
+        render_mode(keyboard_state);
     }
 }
 
@@ -197,10 +206,8 @@ void oled_task_user(void) {
         oled_off();
     } else if (redraw) {
         oled_clear();
-        render_modifiers(keyboard_state);
         render_layer(keyboard_state);
-        render_mode(keyboard_state);
-        render_anim(keyboard_state);
+        render_modifiers(keyboard_state);
     }
     // render_test_pattern();
 }

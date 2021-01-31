@@ -18,3 +18,10 @@ extern const char bitmap_num [] PROGMEM;
 #define MODE_BITMAP_HEIGHT 4
 extern const char bitmap_mac [] PROGMEM;
 extern const char bitmap_linux [] PROGMEM;
+
+#define LEGEND_BITMAP_WIDTH 128
+#define LEGEND_BITMAP_HEIGHT 6 // cut off bottom row
+extern const char bitmap_alpha_legend [] PROGMEM;
+extern const char bitmap_alpha_shift_legend [] PROGMEM;
+extern const char bitmap_func_num_legend [] PROGMEM;
+extern const char bitmap_sym_nav_legend [] PROGMEM;
