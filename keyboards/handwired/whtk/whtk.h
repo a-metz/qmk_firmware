@@ -28,7 +28,7 @@ typedef enum _layer_t {
     LAYER_ALPHA = 0,
     LAYER_SYM_NAV,
     LAYER_FUN_NUM,
-    LAYER_UMLAUT
+    LAYER_UMLAUT,
 } layer_t;
 
 typedef enum _mode_t {
@@ -37,17 +37,15 @@ typedef enum _mode_t {
 } mode_t;
 
 ////////// Utilities for alternative shifted keycodes //////////
-bool check_mod_and_clear(uint16_t mod_keycode);
+typedef struct _mod_cache {
+    uint8_t mod_bit;
+    bool empty;
+    bool state;
+} mod_cache_t;
 
-void mod_set(uint16_t mod_keycode);
+void restore_shift(void);
 
-void mod_clear(uint16_t mod_keycode);
-
-void mod_restore(uint16_t mod_keycode);
-
-void shift_cleared_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycode);
-
-void shift_all_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycode);
+void shift_cleared(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycode);
 
 ////////// Synchronized state between keyboard sides //////////
 typedef struct _keyboard_state_t {

@@ -6,74 +6,96 @@ void matrix_init_kb(void) {
     matrix_init_user();
 };
 
+keyboard_state_t state = {
+    .keypress_count = 0,
+    .active_layer = LAYER_ALPHA,
+    .modifiers = 0,
+    .mode = MODE_LINUX,
+    .legend = false,
+};
+
 ////////// Utilities for alternative shifted keycodes //////////
-uint8_t mods_state = 0;
+mod_cache_t lshift_cache = {
+    .mod_bit = MOD_BIT(KC_LSHIFT),
+    .empty = true,
+    .state = false,
+};
 
-bool check_mod_and_clear(uint16_t mod_keycode) {
-    bool mod_active = get_mods() & MOD_BIT(mod_keycode);
+mod_cache_t rshift_cache = {
+    .mod_bit = MOD_BIT(KC_RSHIFT),
+    .empty = true,
+    .state = false,
+};
 
-    if (mod_active) {
-        del_mods(MOD_BIT(mod_keycode));
+bool get_state_and_push(mod_cache_t *mod_cache, bool desired_state) {
+    bool mod_state = (bool)(get_mods() & mod_cache->mod_bit);
+
+    if (desired_state == mod_state || !mod_cache->empty) {
+        return mod_state;
     }
 
-    return mod_active;
-}
+    mod_cache->empty = false;
+    mod_cache->state = mod_state;
 
-void mod_set(uint16_t mod_keycode) {
-    mods_state |= MOD_BIT(mod_keycode);
-}
-
-void mod_clear(uint16_t mod_keycode) {
-    mods_state &= ~MOD_BIT(mod_keycode);
-}
-
-void mod_restore(uint16_t mod_keycode) {
-    if (mods_state & MOD_BIT(mod_keycode)) {
-        add_mods(MOD_BIT(KC_LSHIFT));
+    if (desired_state) {
+        add_mods(mod_cache->mod_bit);
     } else {
-        del_mods(MOD_BIT(KC_LSHIFT));
+        del_mods(mod_cache->mod_bit);
     }
+
+    return mod_state;
 }
 
-void shift_cleared_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycode) {
+void pop_state(mod_cache_t *mod_cache) {
+    if (mod_cache->empty) {
+        return;
+    }
+
+    if (mod_cache->state) {
+        add_mods(mod_cache->mod_bit);
+    } else {
+        del_mods(mod_cache->mod_bit);
+    }
+
+    mod_cache->empty = true;
+}
+
+uint8_t update_state(mod_cache_t *mod_cache, uint8_t modifiers) {
+    if (mod_cache->empty) {
+        return modifiers;
+    }
+
+    if (mod_cache->state) {
+        modifiers |= mod_cache->mod_bit;
+    } else {
+        modifiers &= ~mod_cache->mod_bit;
+    }
+
+    return modifiers;
+}
+
+void restore_shift(void) {
+    pop_state(&lshift_cache);
+    pop_state(&rshift_cache);
+}
+
+void shift_cleared(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycode) {
     if (record->event.pressed) {
-        if (check_mod_and_clear(KC_LSHIFT) || check_mod_and_clear(KC_RSHIFT)) {
-          register_code(modded_keycode);
+        bool desired_state = (keycode & QK_LSFT) || (modded_keycode & QK_LSFT);
+        bool lshift = get_state_and_push(&lshift_cache, desired_state);
+        bool rshift = get_state_and_push(&rshift_cache, desired_state);
+        if (lshift || rshift) {
+            register_code(modded_keycode);
         } else {
-          register_code(keycode);
+            register_code(keycode);
         }
     } else {
-        mod_restore(KC_LSHIFT);
-        mod_restore(KC_RSHIFT);
-        unregister_code(keycode);
-        unregister_code(modded_keycode);
-    }
-}
-
-void shift_all_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycode) {
-    if (record->event.pressed) {
-        if (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT)) {
-          register_code(modded_keycode);
-        } else {
-          add_mods(MOD_BIT(KC_LSHIFT));
-          register_code(keycode);
-        }
-    } else {
-        mod_restore(KC_LSHIFT);
         unregister_code(keycode);
         unregister_code(modded_keycode);
     }
 }
 
 ////////// Synchronized state between keyboard sides //////////
-keyboard_state_t state = {
-    .keypress_count = 0,
-    .active_layer = LAYER_ALPHA,
-    .modifiers = 0,
-    .mode = MODE_LINUX,
-    .legend = false
-};
-
 void set_keyboard_state(keyboard_state_t state_) {
     state = state_;
 }
@@ -95,7 +117,7 @@ void register_keypress(void) {
 
 void update_keyboard_state(void) {
     state.active_layer = get_highest_layer(layer_state);
-    state.modifiers = get_mods();
+    state.modifiers = update_state(&rshift_cache, update_state(&lshift_cache, get_mods()));
 }
 
 void set_mode(mode_t mode) {

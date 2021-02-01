@@ -122,26 +122,19 @@ bool process_record_user_mode(uint16_t keycode, keyrecord_t *record) {
 }
 ////////// Shifted keycodes //////////
 bool process_record_user_shift_alternative(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case KC_LSHIFT:
-        case KC_RSHIFT:
-            if (record->event.pressed) {
-                mod_set(keycode);
-            } else {
-                mod_clear(keycode);
-            }
-            return true;
+    restore_shift();
 
+    switch (keycode) {
         case KC_DOT_COMM:
-            shift_cleared_alternative(record, KC_DOT, KC_COMM);
+            shift_cleared(record, KC_DOT, KC_COMM);
             return false;
 
         case KC_EXLM_QUES:
-            shift_all_alternative(record, KC_EXLM, KC_QUES);
+            shift_cleared(record, KC_EXLM, KC_QUES);
             return false;
 
         case KC_SLSH_BSLS:
-            shift_cleared_alternative(record, KC_SLSH, KC_BSLS);
+            shift_cleared(record, KC_SLSH, KC_BSLS);
             return false;
 
         default:
