@@ -29,6 +29,7 @@ typedef enum _layer_t {
     LAYER_SYM_NAV,
     LAYER_FUN_NUM,
     LAYER_UMLAUT,
+    LAYER_MOUSE,
 } layer_t;
 
 typedef enum _mode_t {
@@ -50,10 +51,12 @@ void shift_cleared(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycod
 ////////// Synchronized state between keyboard sides //////////
 typedef struct _keyboard_state_t {
     uint8_t keypress_count;
+    uint8_t mousemove_count;
     layer_t active_layer;
     uint8_t modifiers;
     mode_t mode;
     bool legend;
+    bool mouse_accurate;
 } keyboard_state_t;
 
 void set_keyboard_state(keyboard_state_t);
@@ -64,6 +67,8 @@ bool keyboard_state_equal(keyboard_state_t a, keyboard_state_t b);
 
 void register_keypress(void);
 
+void register_mousemove(void);
+
 void update_keyboard_state(void);
 
 void set_mode(mode_t);
@@ -73,3 +78,7 @@ mode_t get_mode(void);
 void set_legend(bool legend);
 
 bool get_legend(void);
+
+void set_mouse_accurate(bool mouse_accurate);
+
+bool get_mouse_accurate(void);

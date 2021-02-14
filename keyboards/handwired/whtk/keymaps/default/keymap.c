@@ -27,9 +27,11 @@ enum custom_keycodes {
     SWITCH_LINUX,
     SWITCH_MAC,
     SHOW_LEGEND,
+    TOGGLE_LEGEND,
     KC_DOT_COMM,
     KC_EXLM_QUES,
     KC_SLSH_BSLS,
+    MOUSE_ACC,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -37,21 +39,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                       KC_GRV,        KC_EQL,        KC_MINS,       KC_SLSH_BSLS,                 KC_QUOT,       KC_DOT_COMM,   KC_EXLM_QUES,  KC_SCLN,
                                       KC_W,          KC_E,          KC_R,          KC_T,                         KC_Y,          KC_U,          KC_I,          KC_O,
         TOGGLE_MODE,   KC_Q,          KC_S,          KC_D,          KC_F,          KC_G,                         KC_H,          KC_J,          KC_K,          KC_L,          KC_P,          KC_PSCR,
-        SHOW_LEGEND,   KC_A,          KC_Z,          KC_X,          KC_C,          KC_V,                         KC_B,          KC_N,          KC_M,          KC_DEL,        KC_ESC,        KC_INS,
+      MO(LAYER_MOUSE), KC_A,          KC_Z,          KC_X,          KC_C,          KC_V,                         KC_B,          KC_N,          KC_M,          KC_DEL,        KC_ESC,        KC_INS,
         KC_LALT,       KC_LSFT,                      KC_THUMB_L1,   KC_THUMB_L0,   KC_LGUI,                  OSL(LAYER_UMLAUT), KC_THUMB_R0,   KC_THUMB_R1,                  KC_RCTL,       KC_RALT
     ),
     [LAYER_SYM_NAV] = LAYOUT_WHTK(
                                       KC_AT,         KC_LT,         KC_GT,         KC_CIRC,                      XXXXXXX,       KC_PREV_TAB,   XXXXXXX,       KC_NEXT_TAB,
                                       KC_HASH,       KC_LCBR,       KC_RCBR,       KC_ASTR,                      KC_PGUP,       KC_PREV_WORD,  KC_UP,         KC_NEXT_WORD,
-        RESET,         XXXXXXX,       KC_DLR,        KC_LPRN,       KC_RPRN,       KC_AMPR,                      KC_HOME,       KC_LEFT,       KC_DOWN,       KC_RGHT,       XXXXXXX,       KC_PAUS,
-        SHOW_LEGEND,   XXXXXXX,       KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,                      KC_PGDN,       XXXXXXX,       XXXXXXX,       XXXXXXX,       KC_END,        KC_SLCK,
+        TOGGLE_LEGEND, XXXXXXX,       KC_DLR,        KC_LPRN,       KC_RPRN,       KC_AMPR,                      KC_HOME,       KC_LEFT,       KC_DOWN,       KC_RGHT,       XXXXXXX,       KC_PAUS,
+      TG(LAYER_MOUSE), XXXXXXX,       KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,                      KC_PGDN,       XXXXXXX,       XXXXXXX,       XXXXXXX,       KC_END,        KC_SLCK,
         _______,       _______,                      _______,       _______,       _______,                      _______,       _______,       KC_THUMB_R1_F,                _______,       _______
     ),
     [LAYER_FUN_NUM] = LAYOUT_WHTK(
                                       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       KC_DOT,        XXXXXXX,       XXXXXXX,
                                       KC_F1,         KC_F2,         KC_F3,         KC_F4,                        KC_0,          KC_1,          KC_2,          KC_3,
         XXXXXXX,       XXXXXXX,       KC_F5,         KC_F6,         KC_F7,         KC_F8,                        XXXXXXX,       KC_4,          KC_5,          KC_6,          XXXXXXX,       RESET,
-        SHOW_LEGEND,   XXXXXXX,       KC_F9,         KC_F10,        KC_F11,        KC_F12,                       XXXXXXX,       KC_7,          KC_8,          KC_9,          XXXXXXX,       XXXXXXX,
+        XXXXXXX,       XXXXXXX,       KC_F9,         KC_F10,        KC_F11,        KC_F12,                       XXXXXXX,       KC_7,          KC_8,          KC_9,          XXXXXXX,       XXXXXXX,
         _______,       _______,                      _______,       _______,       _______,                      _______,       _______,       _______,                      _______,       _______
     ),
     [LAYER_UMLAUT] = LAYOUT_WHTK(
@@ -60,6 +62,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX,       XXXXXXX,       RALT(KC_S),    XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
         XXXXXXX,       RALT(KC_Q),    XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
         XXXXXXX,       KC_LSFT,                      XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       KC_RSFT,                      XXXXXXX,       XXXXXXX
+    ),
+    [LAYER_MOUSE] = LAYOUT_WHTK(
+                                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
+                                      XXXXXXX,       KC_WH_U,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
+        XXXXXXX,       XXXXXXX,       KC_WH_L,       KC_WH_D,       KC_WH_R,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
+      MO(LAYER_MOUSE), XXXXXXX,       XXXXXXX,       XXXXXXX,       MOUSE_ACC,     XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
+        XXXXXXX,       XXXXXXX,                      KC_BTN2,       KC_BTN1,       KC_BTN3,                      XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX
     )
 };
 
@@ -77,9 +86,16 @@ void map_to(uint16_t keycode, keyrecord_t *record) {
 
 bool process_record_user_custom(uint16_t keycode, keyrecord_t *record) {
     // show legend
-    if (keycode == SHOW_LEGEND) {
-        set_legend(record->event.pressed);
-        return false;
+    switch (keycode) {
+        case SHOW_LEGEND:
+            set_legend(record->event.pressed);
+            return false;
+
+        case TOGGLE_LEGEND:
+            if (record->event.pressed) {
+                set_legend(!get_legend());
+            }
+            return false;
     }
     return true;
 }
@@ -178,25 +194,25 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 ////////// Touchpad config //////////
 #ifdef PS2_MOUSE_ENABLE
 
-ps2_mouse_resolution_t current_resolution = PS2_MOUSE_8_COUNT_MM;
-
 void ps2_mouse_init_user(void) {
-    ps2_mouse_set_resolution(current_resolution);
+    ps2_mouse_set_resolution(PS2_MOUSE_8_COUNT_MM);
     // ps2_mouse_set_sample_rate(200);
 }
 
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    ps2_mouse_resolution_t new_resolution = current_resolution;
-    if (get_highest_layer(layer_state) == LAYER_SYM_NAV) {
-        new_resolution = PS2_MOUSE_2_COUNT_MM;
-    } else {
-        new_resolution = PS2_MOUSE_8_COUNT_MM;
+    if (keycode == MOUSE_ACC) {
+        if (record->event.pressed) {
+            ps2_mouse_set_resolution(PS2_MOUSE_2_COUNT_MM);
+            set_mouse_accurate(true);
+        } else {
+            ps2_mouse_set_resolution(PS2_MOUSE_8_COUNT_MM);
+            set_mouse_accurate(false);
+        }
     }
+}
 
-    if (new_resolution != current_resolution) {
-        ps2_mouse_set_resolution(new_resolution);
-        current_resolution = new_resolution;
-    }
+void ps2_mouse_moved_user(report_mouse_t *mouse_report) {
+    register_mousemove();
 }
 
 #endif

@@ -106,13 +106,20 @@ keyboard_state_t get_keyboard_state(void) {
 
 bool keyboard_state_equal(keyboard_state_t a, keyboard_state_t b) {
     return a.keypress_count == b.keypress_count &&
+           a.mousemove_count == b.mousemove_count &&
            a.active_layer == b.active_layer &&
            a.modifiers == b.modifiers &&
-           a.mode == b.mode;
+           a.mode == b.mode &&
+           a.legend == b.legend &&
+           a.mouse_accurate == b.mouse_accurate;
 }
 
 void register_keypress(void) {
     state.keypress_count++;
+}
+
+void register_mousemove(void) {
+    state.mousemove_count++;
 }
 
 void update_keyboard_state(void) {
@@ -134,5 +141,13 @@ void set_legend(bool legend) {
 
 bool get_legend(void) {
     return state.legend;
+}
+
+void set_mouse_accurate(bool mouse_accurate) {
+    state.mouse_accurate = mouse_accurate;
+}
+
+bool get_mouse_accurate(void) {
+    return state.mouse_accurate;
 }
 
