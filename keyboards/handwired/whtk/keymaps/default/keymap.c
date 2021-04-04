@@ -104,21 +104,21 @@ bool process_record_user_custom(uint16_t keycode, keyrecord_t *record) {
 ////////// Mode alternatives //////////
 bool process_record_user_mode(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-        if (keycode == SWITCH_LINUX || (keycode == TOGGLE_MODE && get_mode() == MODE_MAC)) {
+        if (keycode == SWITCH_LINUX || (keycode == TOGGLE_MODE && get_mode() != MODE_LINUX)) {
             set_mode(MODE_LINUX);
             keymap_config.swap_lctl_lgui = false;
             return false;
         }
 
-        if (keycode == SWITCH_MAC || (keycode == TOGGLE_MODE && get_mode() == MODE_LINUX)) {
+        if (keycode == SWITCH_MAC || (keycode == TOGGLE_MODE && get_mode() != MODE_MAC)) {
             set_mode(MODE_MAC);
             keymap_config.swap_lctl_lgui = true;
             return false;
         }
     }
 
-    // skip keycode remapping for linux mode
-    if (get_mode() == MODE_LINUX) {
+    // skip keycode remapping for non-mac mode
+    if (get_mode() != MODE_MAC) {
         return true;
     }
 

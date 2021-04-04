@@ -33,7 +33,8 @@ typedef enum _layer_t {
 } layer_t;
 
 typedef enum _mode_t {
-    MODE_LINUX = 0,
+    MODE_INIT = 0,
+    MODE_LINUX,
     MODE_MAC,
 } mode_t;
 

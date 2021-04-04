@@ -2,18 +2,6 @@
 #include "quantum.h"
 
 
-void matrix_init_kb(void) {
-    matrix_init_user();
-};
-
-keyboard_state_t state = {
-    .keypress_count = 0,
-    .active_layer = LAYER_ALPHA,
-    .modifiers = 0,
-    .mode = MODE_LINUX,
-    .legend = false,
-};
-
 ////////// Utilities for alternative shifted keycodes //////////
 mod_cache_t lshift_cache = {
     .mod_bit = MOD_BIT(KC_LSHIFT),
@@ -95,7 +83,16 @@ void shift_cleared(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycod
     }
 }
 
+
 ////////// Synchronized state between keyboard sides //////////
+keyboard_state_t state = {
+    .keypress_count = 0,
+    .active_layer = LAYER_ALPHA,
+    .modifiers = 0,
+    .mode = MODE_INIT,
+    .legend = false,
+};
+
 void set_keyboard_state(keyboard_state_t state_) {
     state = state_;
 }
@@ -129,6 +126,7 @@ void update_keyboard_state(void) {
 
 void set_mode(mode_t mode) {
     state.mode = mode;
+    eeconfig_update_kb(mode);
 }
 
 mode_t get_mode(void) {
@@ -151,3 +149,13 @@ bool get_mouse_accurate(void) {
     return state.mouse_accurate;
 }
 
+
+////////// Load persistent state //////////
+void keyboard_post_init_user(void) {
+  state.mode = eeconfig_read_kb();
+  if (state.mode == MODE_INIT || state.mode > MODE_MAC)
+  {
+    // default mode if eeprom value is invalid
+    state.mode = MODE_LINUX;
+  }
+}
