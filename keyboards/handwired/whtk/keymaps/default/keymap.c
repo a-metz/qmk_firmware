@@ -200,14 +200,19 @@ void ps2_mouse_init_user(void) {
 }
 
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (keycode == MOUSE_ACC) {
-        if (record->event.pressed) {
+    bool is_mouse_layer_active = get_highest_layer(layer_state) == LAYER_MOUSE;
+    bool is_mouse_accurate_pressed = (keycode == MOUSE_ACC) && record->event.pressed;
+    if (is_mouse_layer_active) {
+        if (is_mouse_accurate_pressed) {
             ps2_mouse_set_resolution(PS2_MOUSE_2_COUNT_MM);
             set_mouse_accurate(true);
         } else {
-            ps2_mouse_set_resolution(PS2_MOUSE_8_COUNT_MM);
+            ps2_mouse_set_resolution(PS2_MOUSE_4_COUNT_MM);
             set_mouse_accurate(false);
         }
+    } else {
+        ps2_mouse_set_resolution(PS2_MOUSE_8_COUNT_MM);
+        set_mouse_accurate(false);
     }
 }
 
