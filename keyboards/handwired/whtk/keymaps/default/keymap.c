@@ -102,17 +102,37 @@ bool process_record_user_custom(uint16_t keycode, keyrecord_t *record) {
 
 
 ////////// Mode alternatives //////////
+void update_swap_lctl_lgui(void) {
+    keymap_config.swap_lctl_lgui = (get_mode() == MODE_MAC);
+}
+
+void keyboard_post_init_user(void) {
+    // load persistent value
+    mode_t mode = eeconfig_read_user();
+    if (mode == MODE_INIT || mode > MODE_MAC)
+    {
+        // default mode if eeprom value is invalid
+        mode = MODE_LINUX;
+    }
+    set_mode(mode);
+    update_swap_lctl_lgui();
+}
+
+void switch_mode(mode_t mode) {
+    set_mode(mode);
+    update_swap_lctl_lgui();
+    eeconfig_update_user(mode);
+}
+
 bool process_record_user_mode(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         if (keycode == SWITCH_LINUX || (keycode == TOGGLE_MODE && get_mode() != MODE_LINUX)) {
-            set_mode(MODE_LINUX);
-            keymap_config.swap_lctl_lgui = false;
+            switch_mode(MODE_LINUX);
             return false;
         }
 
         if (keycode == SWITCH_MAC || (keycode == TOGGLE_MODE && get_mode() != MODE_MAC)) {
-            set_mode(MODE_MAC);
-            keymap_config.swap_lctl_lgui = true;
+            switch_mode(MODE_MAC);
             return false;
         }
     }

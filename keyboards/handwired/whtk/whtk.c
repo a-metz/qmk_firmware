@@ -126,7 +126,6 @@ void update_keyboard_state(void) {
 
 void set_mode(mode_t mode) {
     state.mode = mode;
-    eeconfig_update_kb(mode);
 }
 
 mode_t get_mode(void) {
@@ -149,13 +148,3 @@ bool get_mouse_accurate(void) {
     return state.mouse_accurate;
 }
 
-
-////////// Load persistent state //////////
-void keyboard_post_init_user(void) {
-  state.mode = eeconfig_read_kb();
-  if (state.mode == MODE_INIT || state.mode > MODE_MAC)
-  {
-    // default mode if eeprom value is invalid
-    state.mode = MODE_LINUX;
-  }
-}
