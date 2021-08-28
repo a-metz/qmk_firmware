@@ -115,12 +115,25 @@ void render_modifiers(keyboard_state_t keyboard_state) {
 }
 
 void render_mode(keyboard_state_t keyboard_state) {
-    switch (keyboard_state.mode) {
-        case MODE_LINUX:
+    switch (keyboard_state.mode.os) {
+        case OS_LINUX:
             oled_write_raw_rect_P(bitmap_linux, 93, 2, MODE_BITMAP_WIDTH, MODE_BITMAP_HEIGHT);
             break;
-        case MODE_MAC:
+        case OS_MAC:
             oled_write_raw_rect_P(bitmap_mac, 93, 2, MODE_BITMAP_WIDTH, MODE_BITMAP_HEIGHT);
+            break;
+        default:
+            break;
+    }
+
+    switch (keyboard_state.mode.rows) {
+        case ROWS_3:
+            oled_set_cursor(0, 0);
+            oled_write_P(PSTR("               3-row\n"), false);
+            break;
+        case ROWS_4:
+            oled_set_cursor(0, 0);
+            oled_write_P(PSTR("               4-row\n"), false);
             break;
         default:
             break;
@@ -131,6 +144,20 @@ void render_layer(keyboard_state_t keyboard_state) {
     switch (keyboard_state.active_layer) {
         // show legend if flag is set, otherwise show animation
         case LAYER_ALPHA:
+            render_anim(keyboard_state);
+            render_mode(keyboard_state);
+            break;
+        case LAYER_SYMBOL:
+            oled_set_cursor(0, 0);
+            oled_write_P(PSTR("\n"), false);
+            oled_write_P(PSTR("  ~ + _ \\    \" , ? :\n"), false);
+            oled_write_P(PSTR("\n"), false);
+            oled_write_P(PSTR("  ` = - /    ' . ! ;\n"), false);
+            oled_write_P(PSTR("\n"), false);
+            oled_write_P(PSTR("  | & * ^    @ # $ %\n"), false);
+            oled_write_P(PSTR("\n"), false);
+            break;
+        case LAYER_ALP_PUN:
             if (keyboard_state.legend) {
                 if (keyboard_state.modifiers & MOD_MASK_SHIFT) {
                     oled_write_raw_rect_P(bitmap_alpha_shift_legend, 0, 0, LEGEND_BITMAP_WIDTH, LEGEND_BITMAP_HEIGHT);
@@ -147,7 +174,7 @@ void render_layer(keyboard_state_t keyboard_state) {
             render_anim(keyboard_state);
             render_mode(keyboard_state);
             oled_set_cursor(0, 0);
-            oled_write_P(PSTR("   Umlaut\n"), false);
+            oled_write_P(PSTR("   umlaut"), false);
             break;
         // always show legend for remaining layers
         case LAYER_SYM_NAV:

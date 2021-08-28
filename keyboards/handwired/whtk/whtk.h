@@ -25,17 +25,35 @@
     }
 
 typedef enum _layer_t {
-    LAYER_ALPHA = 0,
+    // four row mode layers
+    LAYER_ALP_PUN = 0,
     LAYER_SYM_NAV,
+    // three row mode layers
+    LAYER_ALPHA,
+    LAYER_THUMB,
+    LAYER_BRC_NAV,
+    LAYER_SYMBOL,
+    // general layers
     LAYER_FUN_NUM,
     LAYER_UMLAUT,
     LAYER_MOUSE,
 } layer_t;
 
-typedef enum _mode_t {
-    MODE_INIT = 0,
-    MODE_LINUX,
-    MODE_MAC,
+////////// Configuration //////////
+
+#define MODE_INIT 0
+#define OS_LINUX 1
+#define OS_MAC 2
+#define ROWS_3 1
+#define ROWS_4 2
+
+typedef union {
+    uint32_t raw;
+    struct {
+        uint8_t os;
+        uint8_t rows;
+        uint16_t padding;
+    };
 } mode_t;
 
 ////////// Utilities for alternative shifted keycodes //////////

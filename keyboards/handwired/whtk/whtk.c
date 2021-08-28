@@ -89,7 +89,7 @@ keyboard_state_t state = {
     .keypress_count = 0,
     .active_layer = LAYER_ALPHA,
     .modifiers = 0,
-    .mode = MODE_INIT,
+    .mode.raw = MODE_INIT,
     .legend = false,
 };
 
@@ -106,7 +106,7 @@ bool keyboard_state_equal(keyboard_state_t a, keyboard_state_t b) {
            a.mousemove_count == b.mousemove_count &&
            a.active_layer == b.active_layer &&
            a.modifiers == b.modifiers &&
-           a.mode == b.mode &&
+           a.mode.raw == b.mode.raw &&
            a.legend == b.legend &&
            a.mouse_accurate == b.mouse_accurate;
 }
