@@ -40,16 +40,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LAYER_ALP_PUN] = LAYOUT_WHTK(
                                       KC_GRV,        KC_EQL,        KC_MINS,       KC_SLSH_BSLS,                 KC_QUOT,       KC_DOT_COMM,   KC_EXLM_QUES,  KC_SCLN,
                                       KC_W,          KC_E,          KC_R,          KC_T,                         KC_Y,          KC_U,          KC_I,          KC_O,
-        TOGGLE_MODE,   KC_Q,          KC_S,          KC_D,          KC_F,          KC_G,                         KC_H,          KC_J,          KC_K,          KC_L,          KC_P,          KC_PSCR,
-      MO(LAYER_MOUSE), KC_A,          KC_Z,          KC_X,          KC_C,          KC_V,                         KC_B,          KC_N,          KC_M,          KC_DEL,        KC_ESC,        KC_INS,
-        KC_LALT,       KC_LSFT,                      KC_THUMB_L1,   KC_THUMB_L0, KC_LGUI,                    OSL(LAYER_UMLAUT), KC_THUMB_R0,   KC_THUMB_R1,                  KC_RCTL,       KC_RALT
+        TOGGLE_MODE,   KC_Q,          KC_S,          KC_D,          KC_F,          KC_G,                         KC_H,          KC_J,          KC_K,          KC_L,          KC_P,          XXXXXXX,
+        XXXXXXX,       KC_A,          KC_Z,          KC_X,          KC_C,          KC_V,                         KC_B,          KC_N,          KC_M,          KC_DEL,        KC_ESC,        XXXXXXX,
+      MO(LAYER_MOUSE), KC_LSFT,                      KC_THUMB_L1,   KC_THUMB_L0,   KC_LGUI,                      KC_LALT,       KC_THUMB_R0,   KC_THUMB_R1,                MO(LAYER_THUMB), XXXXXXX
     ),
     [LAYER_SYM_NAV] = LAYOUT_WHTK(
                                       KC_AT,         KC_LT,         KC_GT,         KC_CIRC,                      XXXXXXX,       KC_PREV_TAB,   XXXXXXX,       KC_NEXT_TAB,
                                       KC_HASH,       KC_LCBR,       KC_RCBR,       KC_ASTR,                      KC_PGUP,       KC_PREV_WORD,  KC_UP,         KC_NEXT_WORD,
-        TOGGLE_LEGEND, XXXXXXX,       KC_DLR,        KC_LPRN,       KC_RPRN,       KC_AMPR,                      KC_HOME,       KC_LEFT,       KC_DOWN,       KC_RGHT,       XXXXXXX,       KC_PAUS,
-      TG(LAYER_MOUSE), XXXXXXX,       KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,                      KC_PGDN,       XXXXXXX,       XXXXXXX,       XXXXXXX,       KC_END,        KC_SLCK,
-        _______,       _______,                      _______,       _______,       _______,                      _______,       _______,       KC_BSPC,                      _______,       _______
+        TOGGLE_LEGEND, XXXXXXX,       KC_DLR,        KC_LPRN,       KC_RPRN,       KC_AMPR,                      KC_HOME,       KC_LEFT,       KC_DOWN,       KC_RGHT,       KC_PSCR,       KC_PAUS,
+        XXXXXXX,       XXXXXXX,       KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,                      KC_PGDN,       XXXXXXX,       XXXXXXX,       KC_INS,        KC_END,        KC_SLCK,
+      TG(LAYER_MOUSE), _______,                      _______,       _______,       _______,                      _______,       _______,       _______,                      _______,       _______
     ),
     // three row mode layers
     [LAYER_ALPHA] = LAYOUT_WHTK(
@@ -58,13 +58,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TOGGLE_MODE,   KC_Q,          KC_S,          KC_D,          KC_F,          KC_G,                         KC_H,          KC_J,          KC_K,          KC_L,          KC_P,          XXXXXXX,
       MO(LAYER_MOUSE), KC_A,          KC_Z,          KC_X,          KC_C,          KC_V,                         KC_B,          KC_N,          KC_M,          KC_DEL,        KC_ESC,        XXXXXXX,
         KC_LALT,       KC_LSFT,                      KC_THUMB_L1,   KC_THUMB_L0_3, KC_LGUI,                 MO(LAYER_FUN_NUM),  KC_THUMB_R0_3, KC_THUMB_R1,                MO(LAYER_THUMB), KC_RALT
-    ),
-    [LAYER_THUMB] = LAYOUT_WHTK(
-                                      _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,
-                                      _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,
-        _______,       _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,       _______,
-        _______,       _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,       _______,
-        _______,       _______,                      KC_TAB,        KC_SPC,        _______,                      _______,       KC_ENT,        KC_BSPC,                      _______,       _______
     ),
     [LAYER_BRC_NAV] = LAYOUT_WHTK(
                                       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,
@@ -81,6 +74,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,       _______,                      _______,       _______,       _______,                      _______,       _______,       _______,                      _______,       _______
     ),
     // general layers
+    [LAYER_THUMB] = LAYOUT_WHTK(
+                                      _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,
+                                      _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,
+        _______,       _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,       _______,
+        _______,       _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,       _______,
+        _______,       _______,                      KC_TAB,        KC_SPC,     OSL(LAYER_UMLAUT),               KC_RALT,       KC_ENT,        KC_BSPC,                      _______,       _______
+    ),
     [LAYER_FUN_NUM] = LAYOUT_WHTK(
                                       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
                                       KC_F1,         KC_F2,         KC_F3,         KC_F4,                        KC_0,          KC_1,          KC_2,          KC_3,
@@ -165,14 +165,14 @@ void toggle_mode(void) {
     else
     {
         mode.os = OS_LINUX;
-        if (mode.rows == ROWS_3)
-        {
-            mode.rows = ROWS_4;
-        }
-        else
-        {
-            mode.rows = ROWS_3;
-        }
+        // if (mode.rows == ROWS_3)
+        // {
+        //     mode.rows = ROWS_4;
+        // }
+        // else
+        // {
+        //     mode.rows = ROWS_3;
+        // }
     }
     switch_mode(mode);
 }
