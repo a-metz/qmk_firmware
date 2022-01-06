@@ -32,3 +32,47 @@
         { L30, L31, L32, L33, L34,      R35, R36, R37, R38, R39 }, \
         { ___, ___, L42, L43, L44,      R45, R46, R47, ___, ___ } \
     }
+
+typedef enum _layer_t {
+    LAYER_ALP_PUN = 0,
+    LAYER_SYM_NAV,
+    LAYER_THUMB,
+    LAYER_FUN_NUM,
+    LAYER_UMLAUT,
+} layer_t;
+
+
+////////// Configuration //////////
+#define MODE_INIT 0
+#define OS_LINUX 1
+#define OS_MAC 2
+
+typedef union {
+    uint32_t raw;
+    struct {
+        uint8_t os;
+        uint8_t unused_0;
+        uint8_t unused_1;
+        uint8_t unused_2;
+    };
+} mode_t;
+
+void set_mode(mode_t);
+
+mode_t get_mode(void);
+
+
+////////// Utilities for alternative shifted keycodes //////////
+typedef struct _mod_cache {
+    uint8_t mod_bit;
+    bool empty;
+    bool state;
+} mod_cache_t;
+
+void restore_shift(void);
+
+void shift_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycode);
+
+
+////////// Keypress animations //////////
+void register_keypress(void);
