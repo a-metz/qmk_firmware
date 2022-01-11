@@ -21,13 +21,13 @@
 #define PRODUCT_ID 0x0000
 #define DEVICE_VER 0x0001
 
-#define MANUFACTURER "whtk"
-#define PRODUCT "whtkpill"
+#define MANUFACTURER wahtak
+#define PRODUCT whtkpill
 
 #define MATRIX_ROWS 5
 #define MATRIX_COLS 10
 #define DIODE_DIRECTION COL2ROW
-#define DEBOUNCE 1
+#define DEBOUNCE 20
 
 #define MATRIX_COL_PINS \
     { A4, A3, A2, A1, A0, A8, B15, B14, B13, B12 }
