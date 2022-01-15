@@ -224,7 +224,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 static void render_oled(void) {
     oled_write_P(PSTR("Whtkpill\n"), false);
-    oled_write_P(PSTR("\n"), false);
     switch (get_highest_layer(layer_state)) {
         case LAYER_ALP_PUN:
             oled_write_P(PSTR("Alpha\n"), false);
@@ -245,7 +244,6 @@ static void render_oled(void) {
             oled_write_P(PSTR("\n"), false);
             break;
     }
-    oled_write_P(PSTR("\n"), false);
     switch (get_mode().os) {
         case OS_LINUX:
             oled_write_P(PSTR("Linux\n"), false);
@@ -258,7 +256,6 @@ static void render_oled(void) {
             break;
     }
 
-    oled_write_P(PSTR("\n"), false);
     uint8_t mods = get_mods();
     if (mods) {
         bool ctrl = mods & MOD_MASK_CTRL;

@@ -41,7 +41,7 @@
 #define I2C1_SCL_PAL_MODE 4
 #define I2C1_SDA_PAL_MODE 4
 
-#define OLED_DISPLAY_128X64
-#define OLED_IC OLED_IC_SH1106
-#define OLED_COLUMN_OFFSET 2
+#define OLED_DISPLAY_128X32
+#define OLED_IC OLED_IC_SSD1305
+#define OLED_COLUMN_OFFSET 4
 #define OLED_FONT_H "glcdfont_improved.c"
