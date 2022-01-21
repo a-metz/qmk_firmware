@@ -8,11 +8,9 @@ BOOTLOADER = stm32-dfu
 #   change yes to no to disable
 #
 KEYBOARD_SHARED_EP = yes
-
-# Build Options
-#   change yes to no to disable
-#
-EXTRAKEY_ENABLE = yes       # Audio control and System control
+EXTRAKEY_ENABLE = yes
 OLED_ENABLE = yes
 
 DEBOUNCE_TYPE = sym_eager_pk
+
+SRC += shift_alternative.c

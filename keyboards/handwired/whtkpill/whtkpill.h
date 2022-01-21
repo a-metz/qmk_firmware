@@ -42,12 +42,6 @@ typedef enum _layer_t {
 } layer_t;
 
 
-////////// Utilities for alternative shifted keycodes //////////
-void restore_shift(void);
-
-void shift_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycode);
-
-
 ////////// Keyboard state //////////
 #define MODE_INIT 0
 #define OS_LINUX 1

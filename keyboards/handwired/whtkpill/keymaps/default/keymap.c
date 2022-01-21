@@ -15,6 +15,7 @@
  */
 #include QMK_KEYBOARD_H
 #include "whtkpill.h"
+#include "shift_alternative.h"
 
 
 //////////// Keymap //////////
