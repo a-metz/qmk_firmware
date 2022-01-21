@@ -42,7 +42,13 @@ typedef enum _layer_t {
 } layer_t;
 
 
-////////// Configuration //////////
+////////// Utilities for alternative shifted keycodes //////////
+void restore_shift(void);
+
+void shift_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycode);
+
+
+////////// Keyboard state //////////
 #define MODE_INIT 0
 #define OS_LINUX 1
 #define OS_MAC 2
@@ -61,18 +67,17 @@ void set_mode(mode_t);
 
 mode_t get_mode(void);
 
+void toggle_mode(void);
 
-////////// Utilities for alternative shifted keycodes //////////
-typedef struct _mod_cache {
-    uint8_t mod_bit;
-    bool empty;
-    bool state;
-} mod_cache_t;
+typedef struct _keyboard_state_t {
+    uint8_t keypress_count;
+    layer_t active_layer;
+    uint8_t modifiers;
+    mode_t mode;
+} keyboard_state_t;
 
-void restore_shift(void);
+void update_keyboard_state(void);
 
-void shift_alternative(keyrecord_t *record, uint16_t keycode, uint16_t modded_keycode);
+bool keyboard_state_equal(keyboard_state_t a, keyboard_state_t b);
 
-
-////////// Keypress animations //////////
 void register_keypress(void);

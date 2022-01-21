@@ -92,46 +92,6 @@ bool process_record_user_custom(uint16_t keycode, keyrecord_t *record) {
 
 
 ////////// Mode alternatives //////////
-void update_swap_lctl_lgui(void) {
-    keymap_config.swap_lctl_lgui = (get_mode().os == OS_MAC);
-}
-
-void switch_mode(mode_t mode) {
-    set_mode(mode);
-    update_swap_lctl_lgui();
-    eeconfig_update_user(mode.raw);
-}
-
-void toggle_mode(void) {
-    mode_t mode = get_mode();
-    if (mode.os == OS_LINUX)
-    {
-        mode.os = OS_MAC;
-    }
-    else
-    {
-        mode.os = OS_LINUX;
-    }
-    switch_mode(mode);
-}
-
-void keyboard_post_init_user(void) {
-    // load persistent value
-    mode_t mode = {
-        .raw = eeconfig_read_user()
-    };
-    if (mode.os != OS_LINUX && mode.os != OS_MAC)
-    {
-        // default os if eeprom value is invalid
-        mode.os = OS_LINUX;
-    }
-    mode.unused_0 = 0;
-    mode.unused_1 = 0;
-    mode.unused_2 = 0;
-    set_mode(mode);
-    update_swap_lctl_lgui();
-}
-
 bool process_record_user_mode(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         if (keycode == TOGGLE_MODE) {
@@ -145,6 +105,7 @@ bool process_record_user_mode(uint16_t keycode, keyrecord_t *record) {
         return true;
     }
 
+    // alternatives in mac mode
     switch (keycode) {
         KC_MAP(KC_PREV_WORD, LALT(KC_LEFT))
         KC_MAP(KC_NEXT_WORD, LALT(KC_RGHT))
@@ -197,6 +158,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
            process_record_user_shift_alternative(keycode, record);
 }
 
+void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    update_keyboard_state();
+}
 
 ////////// Key based tapping term //////////
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {

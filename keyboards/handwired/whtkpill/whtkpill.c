@@ -16,21 +16,13 @@
 #include "whtkpill.h"
 
 
-////////// Configuration //////////
-mode_t mode = {
-    .raw = MODE_INIT,
-};
-
-void set_mode(mode_t mode_) {
-    mode = mode_;
-}
-
-mode_t get_mode(void) {
-    return mode;
-}
-
-
 ////////// Utilities for alternative shifted keycodes //////////
+typedef struct _mod_cache {
+    uint8_t mod_bit;
+    bool empty;
+    bool state;
+} mod_cache_t;
+
 mod_cache_t lshift_cache = {
     .mod_bit = MOD_BIT(KC_LSHIFT),
     .empty = true,
@@ -126,9 +118,74 @@ void shift_alternative(keyrecord_t *record, uint16_t keycode_normal, uint16_t ke
 }
 
 
-////////// Keypress animations //////////
-uint8_t keypress_count;
+////////// Keyboard state //////////
+keyboard_state_t state = {
+    .keypress_count = 0,
+    .active_layer = 0,
+    .modifiers = 0,
+    .mode.raw = MODE_INIT,
+};
+
+void set_mode(mode_t mode) {
+    state.mode = mode;
+}
+
+mode_t get_mode(void) {
+    return state.mode;
+}
+
+void update_swap_lctl_lgui(void) {
+    keymap_config.swap_lctl_lgui = (get_mode().os == OS_MAC);
+}
+
+void switch_mode(mode_t mode) {
+    set_mode(mode);
+    update_swap_lctl_lgui();
+    eeconfig_update_kb(mode.raw);
+}
+
+void toggle_mode(void) {
+    mode_t mode = get_mode();
+    if (mode.os == OS_LINUX)
+    {
+        mode.os = OS_MAC;
+    }
+    else
+    {
+        mode.os = OS_LINUX;
+    }
+    switch_mode(mode);
+}
+
+void keyboard_post_init_kb(void) {
+    // load persistent value
+    mode_t mode = {
+        .raw = eeconfig_read_kb()
+    };
+    if (mode.os != OS_LINUX && mode.os != OS_MAC)
+    {
+        // default os if eeprom value is invalid
+        mode.os = OS_LINUX;
+    }
+    mode.unused_0 = 0;
+    mode.unused_1 = 0;
+    mode.unused_2 = 0;
+    set_mode(mode);
+    update_swap_lctl_lgui();
+}
+
+bool keyboard_state_equal(keyboard_state_t a, keyboard_state_t b) {
+    return a.keypress_count == b.keypress_count &&
+           a.active_layer == b.active_layer &&
+           a.modifiers == b.modifiers &&
+           a.mode.raw == b.mode.raw;
+}
 
 void register_keypress(void) {
-    keypress_count++;
+    state.keypress_count++;
+}
+
+void update_keyboard_state(void) {
+    state.active_layer = get_highest_layer(layer_state);
+    state.modifiers = update_state(&rshift_cache, update_state(&lshift_cache, get_mods()));
 }
