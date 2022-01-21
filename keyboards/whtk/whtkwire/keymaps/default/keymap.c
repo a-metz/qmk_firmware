@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
-#include "whtkpill.h"
+#include "whtkwire.h"
 #include "shift_alternative.h"
 #include "state.h"
 
