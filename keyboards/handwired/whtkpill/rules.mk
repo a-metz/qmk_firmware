@@ -13,4 +13,4 @@ OLED_ENABLE = yes
 
 DEBOUNCE_TYPE = sym_eager_pk
 
-SRC += shift_alternative.c
+SRC += shift_alternative.c state.c

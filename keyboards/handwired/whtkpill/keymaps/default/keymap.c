@@ -16,9 +16,17 @@
 #include QMK_KEYBOARD_H
 #include "whtkpill.h"
 #include "shift_alternative.h"
-
+#include "state.h"
 
 //////////// Keymap //////////
+typedef enum _layer_t {
+    LAYER_ALP_PUN = 0,
+    LAYER_SYM_NAV,
+    LAYER_THUMB,
+    LAYER_FUN_NUM,
+    LAYER_UMLAUT,
+} layer_t;
+
 #define KC_THUMB_L0 LT(LAYER_SYM_NAV, KC_SPC)
 #define KC_THUMB_L1 LCTL_T(KC_TAB)
 #define KC_THUMB_R0 LT(LAYER_FUN_NUM, KC_ENT)
