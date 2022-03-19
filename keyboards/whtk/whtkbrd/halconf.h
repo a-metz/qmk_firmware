@@ -13,35 +13,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
-#include "config_common.h"
+#define HAL_USE_I2C TRUE
 
-#define VENDOR_ID 0xFEED
-#define PRODUCT_ID 0x0000
-#define DEVICE_VER 0x0001
+#define HAL_USE_PWM TRUE
 
-#define MANUFACTURER whtk
-#define PRODUCT whtkpill
+#define HAL_USE_SERIAL TRUE
 
-#define MATRIX_ROWS 5
-#define MATRIX_COLS 10
-#define DIODE_DIRECTION COL2ROW
-#define DEBOUNCE 20
-
-#define MATRIX_COL_PINS \
-    { A4, A3, A2, A1, A0, A8, B15, B14, B13, B12 }
-
-#define MATRIX_ROW_PINS \
-    { B3, B4, B5, B6, B7 }
-
-#define I2C_DRIVER        I2CD1
-#define I2C1_SCL_PIN      B8
-#define I2C1_SDA_PIN      B9
-#define I2C1_SCL_PAL_MODE 4
-#define I2C1_SDA_PAL_MODE 4
-
-#define OLED_DISPLAY_128X32
-#define OLED_IC OLED_IC_SSD1305
-#define OLED_COLUMN_OFFSET 4
-#define OLED_FONT_H "glcdfont_improved.c"
+#include_next <halconf.h>
