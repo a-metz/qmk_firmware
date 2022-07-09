@@ -15,8 +15,10 @@
  */
 #include QMK_KEYBOARD_H
 #include "whtkwire.h"
+
 #include "shift_alternative.h"
 #include "state.h"
+#include "oled.h"
 
 //////////// Keymap //////////
 typedef enum _layer_t {
@@ -70,14 +72,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                        XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
         XXXXXXX,       KC_F1,         KC_F2,         KC_F3,         KC_F4,                        KC_0,          KC_1,          KC_2,          KC_3,          RESET,
         XXXXXXX,       KC_F5,         KC_F6,         KC_F7,         KC_F8,                        KC_DOT,        KC_4,          KC_5,          KC_6,          XXXXXXX,
-        XXXXXXX,       KC_F9,         KC_F10,        KC_F11,        KC_F12,                       KC_COMM,       KC_7,          KC_8,          KC_9,          XXXXXXX,
+        _______,       KC_F9,         KC_F10,        KC_F11,        KC_F12,                       KC_COMM,       KC_7,          KC_8,          KC_9,          XXXXXXX,
                                       _______,       _______,       _______,                      _______,       _______,       _______
     ),
     [LAYER_UMLAUT] = LAYOUT(
                        XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
         XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       RALT(KC_Y),    XXXXXXX,       RALT(KC_P),    XXXXXXX,
         RALT(KC_Q),    RALT(KC_S),    XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
-        KC_LSFT,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
+        _______,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
                                       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       KC_RSFT
     ),
 };
@@ -193,62 +195,62 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 ////////// Display stuff //////////
 #ifdef OLED_ENABLE
-#define NUM_COLUMNS OLED_DISPLAY_WIDTH / OLED_FONT_WIDTH
 
-static void render_oled(void) {
-    oled_write_P(PSTR("Whtkpill\n"), false);
+void render_oled(void) {
+    uint8_t mods = get_mods();
     switch (get_highest_layer(layer_state)) {
         case LAYER_ALP_PUN:
-            oled_write_P(PSTR("Alpha\n"), false);
+            if (mods) {
+                oled_write_P(PSTR("\n"), false);
+                oled_write_P(PSTR("        Alpha        "), false);
+                oled_write_P(PSTR("\n"), false);
+                render_mods();
+            } else {
+                oled_write_P(PSTR("\n"), false);
+                oled_write_P(PSTR("        Alpha        "), false);
+                oled_write_P(PSTR("\n"), false);
+                render_os();
+            }
             break;
         case LAYER_SYM_NAV:
-            oled_write_P(PSTR("Symbol & Navigation\n"), false);
+            oled_write_P(PSTR("@ < > ^              "), false);
+            oled_write_P(PSTR("# { } *     Symbol & "), false);
+            oled_write_P(PSTR("$ ( ) &    Navigation"), false);
+            if (mods) {
+                render_mods();
+            } else {
+                oled_write_P(PSTR("% [ ] |\n"), false);
+            }
             break;
         case LAYER_FUN_NUM:
-            oled_write_P(PSTR("Function & Number\n"), false);
+            oled_write_P(PSTR("              0 1 2 3"), false);
+            oled_write_P(PSTR("Function        4 5 6"), false);
+            oled_write_P(PSTR("& Number        7 8 9"), false);
+            render_mods();
             break;
         case LAYER_THUMB:
-            oled_write_P(PSTR("Thumb hold\n"), false);
+            oled_write_P(PSTR("\n"), false);
+            oled_write_P(PSTR("     Thumb hold\n"), false);
+            oled_write_P(PSTR("\n"), false);
+            if (mods) {
+                render_mods();
+            } else {
+                render_os();
+            }
             break;
         case LAYER_UMLAUT:
-            oled_write_P(PSTR("Umlaut\n"), false);
+            oled_write_P(PSTR("\n"), false);
+            oled_write_P(PSTR("       Umlaut\n"), false);
+            oled_write_P(PSTR("\n"), false);
+            if (mods) {
+                render_mods();
+            } else {
+                render_os();
+            }
             break;
         default:
-            oled_write_P(PSTR("\n"), false);
             break;
     }
-    switch (get_mode().os) {
-        case OS_LINUX:
-            oled_write_P(PSTR("Linux\n"), false);
-            break;
-        case OS_MAC:
-            oled_write_P(PSTR("Mac\n"), false);
-            break;
-        default:
-            oled_write_P(PSTR("\n"), false);
-            break;
-    }
-
-    uint8_t mods = get_mods();
-    if (mods) {
-        bool ctrl = mods & MOD_MASK_CTRL;
-        bool alt = mods & MOD_MASK_ALT;
-        bool shift = mods & MOD_MASK_SHIFT;
-        bool super = mods & MOD_MASK_GUI;
-        // calculate string length and necessary padding to center text
-        uint8_t length = (ctrl * 5) + (alt * 4) + (shift * 6) + (super * 6) - 1;
-        uint8_t padding = (NUM_COLUMNS - length + 1) / 2;
-
-        for (uint8_t i = 0; i < padding; i++) {
-            oled_write_P(PSTR(" "), false);
-        }
-        if (ctrl) oled_write_P(PSTR("CTRL "), false);
-        if (alt) oled_write_P(PSTR("ALT "), false);
-        if (shift) oled_write_P(PSTR("SHIFT "), false);
-        if (super) oled_write_P(PSTR("SUPER"), false);
-    }
-    oled_write_P(PSTR("\n"), false);
-
 }
 
 bool oled_task_user(void) {
