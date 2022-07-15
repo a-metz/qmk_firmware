@@ -27,7 +27,7 @@
 #define MATRIX_ROWS 5
 #define MATRIX_COLS 10
 #define DIODE_DIRECTION COL2ROW
-#define DEBOUNCE 20
+#define DEBOUNCE 50
 
 #define MATRIX_COL_PINS \
     { A4, A3, A2, A1, A0, A8, B15, B14, B13, B12 }
