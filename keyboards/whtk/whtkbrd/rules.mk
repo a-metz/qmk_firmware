@@ -12,3 +12,4 @@ SPLIT_KEYBOARD = yes
 SERIAL_DRIVER = usart
 
 DEFAULT_FOLDER = whtk/whtkbrd
+SRC +=  ../oled.c ../shift_alternative.c ../state.c

@@ -14,3 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "whtkbrd.h"
+
+void matrix_init_kb(void) {
+    // Turn off LEDs
+    setPinOutput(LED_PWR_PIN);
+    writePinLow(LED_PWR_PIN);
+    setPinOutput(LED_STAT_PIN);
+    writePinLow(LED_STAT_PIN);
+}

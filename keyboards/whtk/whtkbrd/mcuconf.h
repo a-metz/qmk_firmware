@@ -18,7 +18,7 @@
 #include_next <mcuconf.h>
 
 #undef STM32_I2C_USE_I2C2
-#define STM32_I2C_USE_I2C2 TRUE
+#define STM32_I2C_USE_I2C2 FALSE
 
 #undef STM32_I2C_USE_DMA
 #define STM32_I2C_USE_DMA FALSE
