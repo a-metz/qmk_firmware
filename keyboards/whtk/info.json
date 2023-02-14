@@ -1,0 +1,8 @@
+{
+    "manufacturer": "whtk",
+    "url": "",
+    "maintainer": "wahtak",
+    "usb": {
+        "vid": "0x1209"
+    }
+}

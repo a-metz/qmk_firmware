@@ -17,13 +17,6 @@
 
 #include "config_common.h"
 
-#define VENDOR_ID 0xFEED
-#define PRODUCT_ID 0x0001
-#define DEVICE_VER 0x0001
-
-#define MANUFACTURER whtk
-#define PRODUCT whtkbrd
-
 #define SPLIT_USB_DETECT
 #define MASTER_RIGHT
 

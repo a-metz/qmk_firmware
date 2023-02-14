@@ -23,13 +23,13 @@ typedef struct _mod_cache {
 } mod_cache_t;
 
 mod_cache_t lshift_cache = {
-    .mod_bit = MOD_BIT(KC_LSHIFT),
+    .mod_bit = MOD_BIT(KC_LSFT),
     .empty = true,
     .state = false,
 };
 
 mod_cache_t rshift_cache = {
-    .mod_bit = MOD_BIT(KC_RSHIFT),
+    .mod_bit = MOD_BIT(KC_RSFT),
     .empty = true,
     .state = false,
 };
