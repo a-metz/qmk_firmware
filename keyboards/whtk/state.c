@@ -86,3 +86,15 @@ void update_keyboard_state(void) {
     state.active_layer = get_highest_layer(layer_state);
     state.modifiers = get_mods();
 }
+
+void register_scroll(int8_t count) {
+    state.scroll_count += count;
+}
+
+int8_t pop_scroll(void) {
+    int8_t scroll = state.scroll_count;
+    state.scroll_count = 0;
+    return scroll;
+}
+
+

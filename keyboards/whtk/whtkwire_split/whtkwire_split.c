@@ -14,3 +14,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "whtkwire_split.h"
+#include "state.h"
+
+void matrix_init_kb(void) {
+    // Set to high pullup for low power glow
+    setPinInputHigh(LED_PWR_PIN);
+
+    // Set to high outout for bright glow
+    // setPinOutput(LED_PWR_PIN);
+    // writePinHigh(LED_PWR_PIN);
+}
+
+bool encoder_update_kb(uint8_t index, bool clockwise) {
+    if (!encoder_update_user(index, clockwise)) {
+        return false;
+    }
+
+    if (clockwise) {
+        tap_code(KC_WH_D);
+        register_scroll(1);
+    } else {
+        tap_code(KC_WH_U);
+        register_scroll(-1);
+    }
+
+    return false;
+}
+
+// report_mouse_t pointing_device_task_kb(report_mouse_t mouse_report) {
+//     mouse_report.v = pop_scroll();
+//     return mouse_report;
+// }

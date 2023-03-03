@@ -40,6 +40,7 @@ void toggle_mode(void);
 
 typedef struct _keyboard_state_t {
     uint8_t keypress_count;
+    int8_t scroll_count;
     layer_state_t active_layer;
     uint8_t modifiers;
     mode_t mode;
@@ -50,3 +51,7 @@ void update_keyboard_state(void);
 bool keyboard_state_equal(keyboard_state_t a, keyboard_state_t b);
 
 void register_keypress(void);
+
+void register_scroll(int8_t count);
+
+int8_t pop_scroll(void);
