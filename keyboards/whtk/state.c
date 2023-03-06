@@ -18,10 +18,15 @@
 ////////// Keyboard state //////////
 keyboard_state_t state = {
     .keypress_count = 0,
+    .scroll_count = 0,
     .active_layer = 0,
     .modifiers = 0,
     .mode.raw = MODE_INIT,
 };
+
+keyboard_state_t get_keyboard_state(void) {
+    return state;
+}
 
 void set_mode(mode_t mode) {
     state.mode = mode;
@@ -54,7 +59,7 @@ void toggle_mode(void) {
     switch_mode(mode);
 }
 
-void keyboard_post_init_kb(void) {
+void init_state(void) {
     // load persistent value
     mode_t mode = {
         .raw = eeconfig_read_kb()
@@ -73,6 +78,7 @@ void keyboard_post_init_kb(void) {
 
 bool keyboard_state_equal(keyboard_state_t a, keyboard_state_t b) {
     return a.keypress_count == b.keypress_count &&
+           a.scroll_count == b.scroll_count &&
            a.active_layer == b.active_layer &&
            a.modifiers == b.modifiers &&
            a.mode.raw == b.mode.raw;

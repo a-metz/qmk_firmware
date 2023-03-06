@@ -11,4 +11,4 @@ OLED_ENABLE = no
 SERIAL_DRIVER = usart
 
 DEFAULT_FOLDER = whtk/whtkbrd
-SRC +=  ../oled.c ../shift_alternative.c ../state.c
+SRC += ../shift_alternative.c ../state.c

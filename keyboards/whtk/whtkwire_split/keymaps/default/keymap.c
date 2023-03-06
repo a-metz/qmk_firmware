@@ -27,6 +27,7 @@ typedef enum _layer_t {
     LAYER_THUMB,
     LAYER_FUN_NUM,
     LAYER_UMLAUT,
+    LAYER_POINTER,
 } layer_t;
 
 #define KC_THUMB_L0 LT(LAYER_SYM_NAV, KC_SPC)
@@ -82,6 +83,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
                                       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       KC_RSFT
     ),
+    [LAYER_POINTER] = LAYOUT(
+                       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,
+        _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
+        _______,       KC_BTN2,       KC_BTN3,       KC_BTN1,       _______,                      _______,       _______,       _______,       _______,       _______,
+        _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
+                                      _______,       _______,       _______,                      _______,       _______,       _______
+    ),
 };
 
 
@@ -97,7 +105,12 @@ void map_to(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool process_record_user_custom(uint16_t keycode, keyrecord_t *record) {
-    // nothing for now
+    if (record->event.pressed) {
+        if (keycode == QK_BOOT) {
+            show_oled_bootloader();
+        }
+    }
+
     return true;
 }
 
@@ -173,6 +186,7 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
     update_keyboard_state();
 }
 
+
 ////////// Key based tapping term //////////
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch(keycode) {
@@ -193,92 +207,46 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-////////// Display stuff //////////
-#ifdef OLED_ENABLE
-
-void render_oled(void) {
-    // 'small_test', 64x32px
-    static const char epd_bitmap_small_test [] PROGMEM = {
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 
-	0x80, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 0xc0, 0x20, 0x20, 0x40, 0x40, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 0x38, 0xfc, 0xfe, 0xfe, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
-	0xff, 0xff, 0xff, 0xfe, 0xfc, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x1c, 0x23, 0xe0, 0xe0, 0x20, 0x10, 0x10, 0x09, 0x07, 0x03, 0x07, 0x06, 0x06, 0x0c, 
-	0x0c, 0x18, 0x18, 0xf0, 0x30, 0x10, 0x10, 0xf0, 0xb0, 0xb0, 0xe0, 0xc0, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 0x38, 0x7f, 0xff, 0xff, 0xff, 0xff, 0x7f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 
-	0x7f, 0xff, 0xff, 0xff, 0x7f, 0x07, 0x0f, 0x1e, 0x1e, 0x1c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x38, 0xc4, 0x07, 0x07, 0x04, 0x08, 0x08, 0x90, 0xe0, 0xc0, 0xe0, 0x60, 0x70, 0x30, 
-	0x38, 0x1c, 0x1e, 0x0f, 0x0c, 0x0c, 0x0e, 0x0f, 0x0d, 0x0d, 0x07, 0x03, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 0x03, 0x04, 0x04, 0x02, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    };
-
+////////// Keymap specific render layer override //////////
+void render_layer(uint8_t layer) {
     oled_clear();
-    oled_write_raw_P(epd_bitmap_small_test, sizeof(epd_bitmap_small_test));
 
-    // uint8_t mods = get_mods();
-    // switch (get_highest_layer(layer_state)) {
-    //     case LAYER_ALP_PUN:
-    //         if (mods) {
-    //             oled_write_P(PSTR("\n"), false);
-    //             oled_write_P(PSTR("        Alpha        "), false);
-    //             oled_write_P(PSTR("\n"), false);
-    //             render_mods();
-    //         } else {
-    //             oled_write_P(PSTR("\n"), false);
-    //             oled_write_P(PSTR("        Alpha        "), false);
-    //             oled_write_P(PSTR("\n"), false);
-    //             render_os();
-    //         }
-    //         break;
-    //     case LAYER_SYM_NAV:
-    //         oled_write_P(PSTR("@ < > ^              "), false);
-    //         oled_write_P(PSTR("# { } *     Symbol & "), false);
-    //         oled_write_P(PSTR("$ ( ) &    Navigation"), false);
-    //         if (mods) {
-    //             render_mods();
-    //         } else {
-    //             oled_write_P(PSTR("% [ ] |\n"), false);
-    //         }
-    //         break;
-    //     case LAYER_FUN_NUM:
-    //         oled_write_P(PSTR("              0 1 2 3"), false);
-    //         oled_write_P(PSTR("Function        4 5 6"), false);
-    //         oled_write_P(PSTR("& Number        7 8 9"), false);
-    //         render_mods();
-    //         break;
-    //     case LAYER_THUMB:
-    //         oled_write_P(PSTR("\n"), false);
-    //         oled_write_P(PSTR("     Thumb hold\n"), false);
-    //         oled_write_P(PSTR("\n"), false);
-    //         if (mods) {
-    //             render_mods();
-    //         } else {
-    //             render_os();
-    //         }
-    //         break;
-    //     case LAYER_UMLAUT:
-    //         oled_write_P(PSTR("\n"), false);
-    //         oled_write_P(PSTR("       Umlaut\n"), false);
-    //         oled_write_P(PSTR("\n"), false);
-    //         if (mods) {
-    //             render_mods();
-    //         } else {
-    //             render_os();
-    //         }
-    //         break;
-    //     default:
-    //         break;
-    // }
+    switch (layer) {
+        case LAYER_ALP_PUN:
+            oled_write("ALPHA", false);
+            break;
+        case LAYER_SYM_NAV:
+            if (is_keyboard_left())
+            {
+                oled_write("SYM", false);
+            } else {
+                oled_write("NAV", false);
+            }
+            break;
+        case LAYER_FUN_NUM:
+            if (is_keyboard_left())
+            {
+                oled_write("FUN", false);
+            } else {
+                oled_write("NUM", false);
+            }
+            break;
+        case LAYER_THUMB:
+            oled_write("Thumb hold", false);
+            break;
+        case LAYER_UMLAUT:
+            oled_write("Umlaut", false);
+            break;
+        case LAYER_POINTER:
+            oled_write("Pointer", false);
+            break;
+        default:
+            break;
+    }
 }
 
-bool oled_task_user(void) {
-    render_oled();
-    return false;
+////////// Pointing device //////////
+void pointing_device_init_user(void) {
+    set_auto_mouse_layer(LAYER_POINTER);
+    set_auto_mouse_enable(true);
 }
-
-#endif

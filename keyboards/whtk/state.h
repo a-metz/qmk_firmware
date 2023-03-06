@@ -32,12 +32,6 @@ typedef union {
     };
 } mode_t;
 
-void set_mode(mode_t);
-
-mode_t get_mode(void);
-
-void toggle_mode(void);
-
 typedef struct _keyboard_state_t {
     uint8_t keypress_count;
     int8_t scroll_count;
@@ -45,6 +39,16 @@ typedef struct _keyboard_state_t {
     uint8_t modifiers;
     mode_t mode;
 } keyboard_state_t;
+
+void init_state(void);
+
+keyboard_state_t get_keyboard_state(void);
+
+void set_mode(mode_t);
+
+mode_t get_mode(void);
+
+void toggle_mode(void);
 
 void update_keyboard_state(void);
 

@@ -11,4 +11,4 @@ EXTRAKEY_ENABLE = yes
 OLED_ENABLE = yes
 
 DEFAULT_FOLDER = whtk/whtkwire
-SRC +=  ../oled.c ../shift_alternative.c ../state.c
+SRC += oled.c ../shift_alternative.c ../state.c

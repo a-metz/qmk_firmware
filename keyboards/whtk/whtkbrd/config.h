@@ -20,11 +20,12 @@
 #define SPLIT_USB_DETECT
 #define MASTER_RIGHT
 
-#define SERIAL_USART_FULL_DUPLEX   // Enable full duplex operation mode.
-#define SERIAL_USART_TX_PIN A9     // USART TX pin
-#define SERIAL_USART_RX_PIN A10     // USART RX pin
+#define SERIAL_USART_FULL_DUPLEX // Enable full duplex operation mode.
+#define SERIAL_USART_TX_PIN A9   // USART TX pin
+#define SERIAL_USART_RX_PIN A10  // USART RX pin
 #define SERIAL_USART_PIN_SWAP    // Swap TX and RX pins if keyboard is master halve.
-#define SELECT_SOFT_SERIAL_SPEED 1 // or 0, 2, 3, 4, 5
+#define SELECT_SOFT_SERIAL_SPEED \
+    1                              // or 0, 2, 3, 4, 5
                                    //  0: 460800 baud
                                    //  1: 230400 baud (default)
                                    //  2: 115200 baud
@@ -48,15 +49,11 @@
 #define MATRIX_ROW_PINS \
     { B0, B1, B2, B10, B11 }
 
-#define I2C_DRIVER        I2CD2
-#define I2C2_SCL_PIN      B6
-#define I2C2_SDA_PIN      B7
+#define I2C_DRIVER I2CD2
+#define I2C2_SCL_PIN B6
+#define I2C2_SDA_PIN B7
 #define I2C2_SCL_PAL_MODE 1
 #define I2C2_SDA_PAL_MODE 1
-
-#define OLED_DISPLAY_128X64
-#define OLED_IC OLED_IC_SSD1306
-#define OLED_FONT_H "glcdfont_improved.c"
 
 #define LED_PWR_PIN B8
 #define LED_STAT_PIN B9

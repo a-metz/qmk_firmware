@@ -13,18 +13,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "whtkbrd.h"
+#pragma once
 
-#include "state.h"
+void show_oled_bootloader(void);
 
-void keyboard_post_init_kb(void) {
-    init_state();
-}
-
-void matrix_init_kb(void) {
-    // Turn off LEDs
-    setPinOutput(LED_PWR_PIN);
-    writePinLow(LED_PWR_PIN);
-    setPinOutput(LED_STAT_PIN);
-    writePinLow(LED_STAT_PIN);
-}
+void show_oled_startup(void);
