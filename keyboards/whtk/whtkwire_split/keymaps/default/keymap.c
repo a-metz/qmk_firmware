@@ -19,6 +19,7 @@
 #include "shift_alternative.h"
 #include "state.h"
 #include "oled.h"
+#include "bitmaps.h"
 
 //////////// Keymap //////////
 typedef enum _layer_t {
@@ -209,18 +210,20 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 ////////// Keymap specific render layer override //////////
 void render_layer(uint8_t layer) {
+    static const uint16_t bitmap_size = 256;
+
     oled_clear();
 
     switch (layer) {
         case LAYER_ALP_PUN:
-            oled_write("ALPHA", false);
+            oled_write_raw(bitmap_alpha, bitmap_size);
             break;
         case LAYER_SYM_NAV:
             if (is_keyboard_left())
             {
-                oled_write("SYM", false);
+                oled_write_raw(bitmap_sym, bitmap_size);
             } else {
-                oled_write("NAV", false);
+                oled_write_raw(bitmap_nav, bitmap_size);
             }
             break;
         case LAYER_FUN_NUM:
@@ -228,7 +231,7 @@ void render_layer(uint8_t layer) {
             {
                 oled_write("FUN", false);
             } else {
-                oled_write("NUM", false);
+                oled_write_raw(bitmap_num, bitmap_size);
             }
             break;
         case LAYER_THUMB:

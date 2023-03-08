@@ -16,4 +16,4 @@ ENCODER_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 
 DEFAULT_FOLDER = whtk/whtkwire_split
-SRC += oled.c ../shift_alternative.c ../state.c
+SRC += oled.c bitmaps.c ../shift_alternative.c ../state.c
