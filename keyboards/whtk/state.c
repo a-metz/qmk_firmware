@@ -22,6 +22,7 @@ keyboard_state_t state = {
     .active_layer = 0,
     .modifiers = 0,
     .mode.raw = MODE_INIT,
+    .drag_scroll = false,
 };
 
 keyboard_state_t get_keyboard_state(void) {
@@ -34,6 +35,14 @@ void set_mode(mode_t mode) {
 
 mode_t get_mode(void) {
     return state.mode;
+}
+
+void set_drag_scroll(bool drag_scroll) {
+    state.drag_scroll = drag_scroll;
+}
+
+bool get_drag_scroll(void) {
+    return state.drag_scroll;
 }
 
 void update_swap_lctl_lgui(void) {
@@ -81,7 +90,8 @@ bool keyboard_state_equal(keyboard_state_t a, keyboard_state_t b) {
            a.scroll_count == b.scroll_count &&
            a.active_layer == b.active_layer &&
            a.modifiers == b.modifiers &&
-           a.mode.raw == b.mode.raw;
+           a.mode.raw == b.mode.raw &&
+           a.drag_scroll == b.drag_scroll;
 }
 
 void register_keypress(void) {

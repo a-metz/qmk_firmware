@@ -43,3 +43,24 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
 
     return false;
 }
+
+report_mouse_t pointing_device_task_kb(report_mouse_t mouse_report) {
+    static int8_t scroll_divisor = 8;
+
+    if (get_drag_scroll()) {
+        static int8_t h_residual = 0;
+        static int8_t v_residual = 0;
+
+        int8_t h = mouse_report.x + h_residual;
+        mouse_report.h = h / scroll_divisor;
+        h_residual = h % scroll_divisor;
+
+        int8_t v = -mouse_report.y + v_residual;
+        mouse_report.v = v / scroll_divisor;
+        v_residual = v % scroll_divisor;
+
+        mouse_report.x = 0;
+        mouse_report.y = 0;
+    }
+    return mouse_report;
+}

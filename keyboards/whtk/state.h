@@ -38,6 +38,7 @@ typedef struct _keyboard_state_t {
     layer_state_t active_layer;
     uint8_t modifiers;
     mode_t mode;
+    bool drag_scroll;
 } keyboard_state_t;
 
 void init_state(void);
@@ -47,6 +48,10 @@ keyboard_state_t get_keyboard_state(void);
 void set_mode(mode_t);
 
 mode_t get_mode(void);
+
+void set_drag_scroll(bool);
+
+bool get_drag_scroll(void);
 
 void toggle_mode(void);
 

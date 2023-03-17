@@ -46,6 +46,7 @@ enum custom_keycodes {
     KC_SLSH_BSLS,
     KC_DOT_COMM,
     KC_EXLM_QUES,
+    DRAG_SCROLL,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -89,7 +90,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
         _______,       KC_BTN2,       KC_BTN3,       KC_BTN1,       _______,                      _______,       _______,       _______,       _______,       _______,
         _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
-                                      _______,       _______,       _______,                      _______,       _______,       _______
+                                      _______,       DRAG_SCROLL,   _______,                      _______,       _______,       _______
     ),
 };
 
@@ -110,6 +111,15 @@ bool process_record_user_custom(uint16_t keycode, keyrecord_t *record) {
         if (keycode == QK_BOOT) {
             show_oled_bootloader();
         }
+    }
+
+    if (keycode == DRAG_SCROLL) {
+        if (record->event.pressed) {
+            set_drag_scroll(true);
+        } else {
+            set_drag_scroll(false);
+        }
+        return false;
     }
 
     return true;
@@ -212,36 +222,34 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 void render_layer(uint8_t layer) {
     static const uint16_t bitmap_size = 256;
 
-    oled_clear();
-
     switch (layer) {
         case LAYER_ALP_PUN:
-            oled_write_raw(bitmap_alpha, bitmap_size);
+            oled_write_raw(bitmap_alpha, sizeof(bitmap_alpha));
             break;
         case LAYER_SYM_NAV:
             if (is_keyboard_left())
             {
-                oled_write_raw(bitmap_sym, bitmap_size);
+                oled_write_raw(bitmap_sym, sizeof(bitmap_sym));
             } else {
-                oled_write_raw(bitmap_nav, bitmap_size);
+                oled_write_raw(bitmap_nav, sizeof(bitmap_nav));
             }
             break;
         case LAYER_FUN_NUM:
             if (is_keyboard_left())
             {
-                oled_write("FUN", false);
+                oled_write_raw(bitmap_func, sizeof(bitmap_func));
             } else {
-                oled_write_raw(bitmap_num, bitmap_size);
+                oled_write_raw(bitmap_num, sizeof(bitmap_num));
             }
             break;
         case LAYER_THUMB:
-            oled_write("Thumb hold", false);
+            oled_write_raw(bitmap_thumb, sizeof(bitmap_thumb));
             break;
         case LAYER_UMLAUT:
-            oled_write("Umlaut", false);
+            oled_write_raw(bitmap_umlaut, sizeof(bitmap_umlaut));
             break;
         case LAYER_POINTER:
-            oled_write("Pointer", false);
+            oled_write_raw(bitmap_pointer, sizeof(bitmap_pointer));
             break;
         default:
             break;
