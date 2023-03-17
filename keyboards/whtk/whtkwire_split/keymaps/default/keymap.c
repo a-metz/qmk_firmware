@@ -46,7 +46,6 @@ enum custom_keycodes {
     KC_SLSH_BSLS,
     KC_DOT_COMM,
     KC_EXLM_QUES,
-    DRAG_SCROLL,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -90,7 +89,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
         _______,       KC_BTN2,       KC_BTN3,       KC_BTN1,       _______,                      _______,       _______,       _______,       _______,       _______,
         _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
-                                      _______,       DRAG_SCROLL,   _______,                      _______,       _______,       _______
+                                      _______,       _______,       _______,                      _______,       _______,       _______
     ),
 };
 
@@ -111,15 +110,6 @@ bool process_record_user_custom(uint16_t keycode, keyrecord_t *record) {
         if (keycode == QK_BOOT) {
             show_oled_bootloader();
         }
-    }
-
-    if (keycode == DRAG_SCROLL) {
-        if (record->event.pressed) {
-            set_drag_scroll(true);
-        } else {
-            set_drag_scroll(false);
-        }
-        return false;
     }
 
     return true;
@@ -194,6 +184,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (IS_LAYER_ON(LAYER_SYM_NAV)) {
+        set_drag_scroll(true);
+    } else {
+        set_drag_scroll(false);
+    }
+
     update_keyboard_state();
 }
 
