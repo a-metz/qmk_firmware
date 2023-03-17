@@ -50,3 +50,18 @@ extern const char bitmap_sym[];
 
 // 64x32px
 extern const char bitmap_num[];
+
+// 64x32px
+extern const char bitmap_pointer[];
+
+// 64x32px
+extern const char bitmap_startup[];
+
+// 64x32px
+extern const char bitmap_umlaut[];
+
+// 64x32px
+extern const char bitmap_thumb[];
+
+// 64x32px
+extern const char bitmap_func[];

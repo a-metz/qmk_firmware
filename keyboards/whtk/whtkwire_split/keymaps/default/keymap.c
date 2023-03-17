@@ -216,36 +216,34 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 ////////// Keymap specific render layer override //////////
 void render_layer(uint8_t layer) {
-    static const uint16_t bitmap_size = 256;
-
     switch (layer) {
         case LAYER_ALP_PUN:
-            oled_write_raw(bitmap_alpha, sizeof(bitmap_alpha));
+            oled_write_raw(bitmap_alpha, OLED_MATRIX_SIZE);
             break;
         case LAYER_SYM_NAV:
             if (is_keyboard_left())
             {
-                oled_write_raw(bitmap_sym, sizeof(bitmap_sym));
+                oled_write_raw(bitmap_sym, OLED_MATRIX_SIZE);
             } else {
-                oled_write_raw(bitmap_nav, sizeof(bitmap_nav));
+                oled_write_raw(bitmap_nav, OLED_MATRIX_SIZE);
             }
             break;
         case LAYER_FUN_NUM:
             if (is_keyboard_left())
             {
-                oled_write_raw(bitmap_func, sizeof(bitmap_func));
+                oled_write_raw(bitmap_func, OLED_MATRIX_SIZE);
             } else {
-                oled_write_raw(bitmap_num, sizeof(bitmap_num));
+                oled_write_raw(bitmap_num, OLED_MATRIX_SIZE);
             }
             break;
         case LAYER_THUMB:
-            oled_write_raw(bitmap_thumb, sizeof(bitmap_thumb));
+            oled_write_raw(bitmap_thumb, OLED_MATRIX_SIZE);
             break;
         case LAYER_UMLAUT:
-            oled_write_raw(bitmap_umlaut, sizeof(bitmap_umlaut));
+            oled_write_raw(bitmap_umlaut, OLED_MATRIX_SIZE);
             break;
         case LAYER_POINTER:
-            oled_write_raw(bitmap_pointer, sizeof(bitmap_pointer));
+            oled_write_raw(bitmap_pointer, OLED_MATRIX_SIZE);
             break;
         default:
             break;
