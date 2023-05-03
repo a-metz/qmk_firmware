@@ -41,6 +41,10 @@ typedef enum _layer_t {
 #define KC_PREV_TAB LCTL(KC_PGUP)
 #define KC_NEXT_TAB LCTL(KC_PGDN)
 
+#define KC_BSPC_WORD LCTL(KC_BSPC)
+#define KC_DEL_WORD LCTL(KC_DEL)
+
+
 enum custom_keycodes {
     TOGGLE_MODE = SAFE_RANGE,
     KC_SLSH_BSLS,
@@ -60,14 +64,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                        KC_AT,         KC_LT,         KC_GT,         KC_CIRC,                      XXXXXXX,       KC_PREV_TAB,   XXXXXXX,       KC_NEXT_TAB,
         TOGGLE_MODE,   KC_HASH,       KC_LCBR,       KC_RCBR,       KC_ASTR,                      KC_PGUP,       KC_PREV_WORD,  KC_UP,         KC_NEXT_WORD,  KC_PSCR,
         XXXXXXX,       KC_DLR,        KC_LPRN,       KC_RPRN,       KC_AMPR,                      KC_HOME,       KC_LEFT,       KC_DOWN,       KC_RGHT,       KC_END,
-        _______,       KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,                      KC_PGDN,       XXXXXXX,       XXXXXXX,       KC_INS,        _______,
-                                      _______,       _______,       _______,                      _______,       _______,       _______
+        _______,       KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,                      KC_PGDN,       XXXXXXX,       XXXXXXX,       KC_DEL_WORD,   _______,
+                                      _______,       _______,       _______,                      _______,       _______,       KC_BSPC_WORD
     ),
     [LAYER_THUMB] = LAYOUT(
                        _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,
         _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
         _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
-        _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
+        _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       KC_INS,        _______,
                                       KC_TAB,        KC_SPC,        OSL(LAYER_UMLAUT),            KC_RALT,       KC_ENT,        KC_BSPC
     ),
     [LAYER_FUN_NUM] = LAYOUT(
@@ -138,6 +142,8 @@ bool process_record_user_mode(uint16_t keycode, keyrecord_t *record) {
         KC_MAP(KC_NEXT_TAB, LCTL(KC_TAB))
         KC_MAP(KC_HOME, LGUI(KC_LEFT))
         KC_MAP(KC_END, LGUI(KC_RGHT))
+        KC_MAP(KC_BSPC_WORD, LALT(KC_BSPC))
+        KC_MAP(KC_DEL_WORD, LALT(KC_DEL))
 
         KC_MAP(OSL(LAYER_UMLAUT), LALT(KC_U))  // mac umlaut leader
 
