@@ -152,7 +152,7 @@ bool oled_task_kb(void) {
     static uint8_t last_layer = 0;
     static bool layer_changed = true;
     static mode_t last_mode = { .raw = MODE_INIT };
-    static bool mode_changed = true;
+    static bool mode_changed = false;
     static uint8_t last_modifiers = 0;
     static bool modifiers_changed = false;
 
@@ -192,7 +192,16 @@ bool oled_task_kb(void) {
         return true;
     }
 
-    if (layer_changed && show_dynamic_timed(SCREEN_LAYER, current_layer == 0 ? 2000 : 30000)) {
+    bool is_default_layer = current_layer == 0;
+    if (layer_changed && is_default_layer && show_dynamic_timed(SCREEN_LAYER, 2000)) {
+        render_layer(current_layer);
+        // draw mode on top of layer on master side
+        render_mode(current_mode);
+        layer_changed = false;
+        return true;
+    }
+
+    if (layer_changed && show_dynamic_timed(SCREEN_LAYER, 30000)) {
         render_layer(current_layer);
         layer_changed = false;
         return true;
