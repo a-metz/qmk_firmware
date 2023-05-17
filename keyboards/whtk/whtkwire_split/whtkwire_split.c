@@ -25,6 +25,9 @@ void matrix_init_kb(void) {
     // Set to high outout for bright glow
     // setPinOutput(LED_PWR_PIN);
     // writePinHigh(LED_PWR_PIN);
+}
+
+void keyboard_post_init_kb(void) {
     init_state();
 }
 
