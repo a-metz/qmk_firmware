@@ -29,6 +29,7 @@ void matrix_init_kb(void) {
 
 void keyboard_post_init_kb(void) {
     init_state();
+    //debug_enable=true;
 }
 
 bool encoder_update_kb(uint8_t index, bool clockwise) {

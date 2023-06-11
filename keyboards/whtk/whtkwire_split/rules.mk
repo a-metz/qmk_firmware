@@ -14,6 +14,7 @@ POINTING_DEVICE_ENABLE = yes
 POINTING_DEVICE_DRIVER = cirque_pinnacle_i2c
 ENCODER_ENABLE = yes
 MOUSEKEY_ENABLE = yes
+CONSOLE_ENABLE = yes
 
 DEFAULT_FOLDER = whtk/whtkwire_split
 SRC += oled.c bitmaps.c ../shift_alternative.c ../state.c

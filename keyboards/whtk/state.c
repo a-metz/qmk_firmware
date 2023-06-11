@@ -30,6 +30,7 @@ keyboard_state_t get_keyboard_state(void) {
 }
 
 void set_mode(mode_t mode) {
+    uprintf("mode.os: %d\n", mode.os);
     state.mode = mode;
 }
 
@@ -99,8 +100,17 @@ void register_keypress(void) {
 }
 
 void update_keyboard_state(void) {
-    state.active_layer = get_highest_layer(layer_state);
-    state.modifiers = get_mods();
+    layer_state_t new_active_layer = get_highest_layer(layer_state);
+    if (new_active_layer != state.active_layer) {
+        state.active_layer = get_highest_layer(layer_state);
+        uprintf("active_layer: %d\n", new_active_layer);
+    }
+
+    uint8_t new_modifiers = get_mods();
+    if (new_modifiers != state.modifiers) {
+        state.modifiers = new_modifiers;
+        uprintf("modifiers: %d\n", new_modifiers);
+    }
 }
 
 void register_scroll(int8_t count) {
