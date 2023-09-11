@@ -38,10 +38,8 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
     }
 
     if (clockwise) {
-        tap_code(KC_WH_D);
         register_scroll(1);
     } else {
-        tap_code(KC_WH_U);
         register_scroll(-1);
     }
 

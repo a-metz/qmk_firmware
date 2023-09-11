@@ -258,8 +258,38 @@ void render_layer(uint8_t layer) {
     }
 }
 
+
 ////////// Pointing device //////////
 void pointing_device_init_user(void) {
     set_auto_mouse_layer(LAYER_POINTER);
     set_auto_mouse_enable(true);
+}
+
+
+////////// Encoder //////////
+bool encoder_update_user(uint8_t index, bool clockwise) {
+    uint8_t current_layer = get_highest_layer(layer_state);
+    if (current_layer == LAYER_SYM_NAV) {
+        if (get_mode().os != OS_MAC) {
+            if (clockwise) {
+                tap_code16(LALT(KC_RGHT));
+            } else {
+                tap_code16(LALT(KC_LEFT));
+            }
+        } else {
+            if (clockwise) {
+                tap_code16(KC_NEXT_WORD);
+            } else {
+                tap_code16(KC_PREV_WORD);
+            }
+        }
+    } else {
+        if (clockwise) {
+            tap_code16(KC_RGHT);
+        } else {
+            tap_code16(KC_LEFT);
+        }
+    }
+
+    return true;
 }
