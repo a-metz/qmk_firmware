@@ -64,15 +64,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                        KC_AT,         KC_LT,         KC_GT,         KC_CIRC,                      XXXXXXX,       KC_PREV_TAB,   XXXXXXX,       KC_NEXT_TAB,
         TOGGLE_MODE,   KC_HASH,       KC_LCBR,       KC_RCBR,       KC_ASTR,                      KC_PGUP,       KC_PREV_WORD,  KC_UP,         KC_NEXT_WORD,  KC_PSCR,
         XXXXXXX,       KC_DLR,        KC_LPRN,       KC_RPRN,       KC_AMPR,                      KC_HOME,       KC_LEFT,       KC_DOWN,       KC_RGHT,       KC_END,
-        _______,       KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,                      KC_PGDN,       XXXXXXX,       XXXXXXX,       KC_DEL_WORD,   TG(LAYER_THUMB),
-                                      _______,       _______,       _______,                      _______,       _______,       KC_BSPC_WORD
+        _______,       KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,                      KC_PGDN,       XXXXXXX,       XXXXXXX,       KC_INS,        TG(LAYER_THUMB),
+                                      _______,       _______,       _______,                      _______,       _______,       _______
     ),
     [LAYER_THUMB] = LAYOUT(
                        _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,
         _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
         _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
-        _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       KC_INS,        _______,
-                                      KC_TAB,        KC_SPC,        OSL(LAYER_UMLAUT),            KC_RALT,       KC_ENT,        KC_BSPC
+        _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       KC_DEL_WORD,   _______,
+                                      KC_TAB,        KC_SPC,        OSL(LAYER_UMLAUT),            KC_RALT,       KC_ENT,        KC_BSPC_WORD
     ),
     [LAYER_FUN_NUM] = LAYOUT(
                        XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
