@@ -270,7 +270,7 @@ void pointing_device_init_user(void) {
 bool encoder_update_user(uint8_t index, bool clockwise) {
     uint8_t current_layer = get_highest_layer(layer_state);
     if (current_layer == LAYER_SYM_NAV) {
-        if (get_mode().os != OS_MAC) {
+        if (get_mode().os == OS_MAC) {
             if (clockwise) {
                 tap_code16(LALT(KC_RGHT));
             } else {
