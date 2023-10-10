@@ -13,8 +13,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifdef OLED_ENABLE
-
 #include "oled.h"
 #include "state.h"
 
@@ -74,4 +72,6 @@ void render_os(void) {
     }
 }
 
-#endif
+void render_bootloader(void) {
+    oled_write_P(PSTR("Bootloader\n\n\n\n"), false);
+}

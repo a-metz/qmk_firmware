@@ -18,3 +18,5 @@
 void render_mods(void);
 
 void render_os(void);
+
+void render_bootloader(void);

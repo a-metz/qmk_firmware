@@ -39,6 +39,10 @@ typedef enum _layer_t {
 #define KC_PREV_TAB LCTL(KC_PGUP)
 #define KC_NEXT_TAB LCTL(KC_PGDN)
 
+#define KC_BSPC_WORD LCTL(KC_BSPC)
+#define KC_DEL_WORD LCTL(KC_DEL)
+
+
 enum custom_keycodes {
     TOGGLE_MODE = SAFE_RANGE,
     KC_SLSH_BSLS,
@@ -58,19 +62,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                        KC_AT,         KC_LT,         KC_GT,         KC_CIRC,                      XXXXXXX,       KC_PREV_TAB,   XXXXXXX,       KC_NEXT_TAB,
         TOGGLE_MODE,   KC_HASH,       KC_LCBR,       KC_RCBR,       KC_ASTR,                      KC_PGUP,       KC_PREV_WORD,  KC_UP,         KC_NEXT_WORD,  KC_PSCR,
         XXXXXXX,       KC_DLR,        KC_LPRN,       KC_RPRN,       KC_AMPR,                      KC_HOME,       KC_LEFT,       KC_DOWN,       KC_RGHT,       KC_END,
-        _______,       KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,                      KC_PGDN,       XXXXXXX,       XXXXXXX,       KC_INS,        _______,
+        _______,       KC_PERC,       KC_LBRC,       KC_RBRC,       KC_PIPE,                      KC_PGDN,       XXXXXXX,       XXXXXXX,       KC_INS,        TG(LAYER_THUMB),
                                       _______,       _______,       _______,                      _______,       _______,       _______
     ),
     [LAYER_THUMB] = LAYOUT(
                        _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,
         _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
         _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
-        _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       _______,       _______,
-                                      KC_TAB,        KC_SPC,        OSL(LAYER_UMLAUT),            KC_RALT,       KC_ENT,        KC_BSPC
+        _______,       _______,       _______,       _______,       _______,                      _______,       _______,       _______,       KC_DEL_WORD,   _______,
+                                      KC_TAB,        KC_SPC,        OSL(LAYER_UMLAUT),            KC_RALT,       KC_ENT,        KC_BSPC_WORD
     ),
     [LAYER_FUN_NUM] = LAYOUT(
                        XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,                      XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,
-        XXXXXXX,       KC_F1,         KC_F2,         KC_F3,         KC_F4,                        KC_0,          KC_1,          KC_2,          KC_3,          RESET,
+        XXXXXXX,       KC_F1,         KC_F2,         KC_F3,         KC_F4,                        KC_0,          KC_1,          KC_2,          KC_3,          QK_BOOT,
         XXXXXXX,       KC_F5,         KC_F6,         KC_F7,         KC_F8,                        KC_DOT,        KC_4,          KC_5,          KC_6,          XXXXXXX,
         _______,       KC_F9,         KC_F10,        KC_F11,        KC_F12,                       KC_COMM,       KC_7,          KC_8,          KC_9,          XXXXXXX,
                                       _______,       _______,       _______,                      _______,       _______,       _______
@@ -97,7 +101,12 @@ void map_to(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool process_record_user_custom(uint16_t keycode, keyrecord_t *record) {
-    // nothing for now
+    if (record->event.pressed) {
+        if (keycode == QK_BOOT) {
+            render_bootloader();
+        }
+    }
+
     return true;
 }
 
@@ -124,6 +133,8 @@ bool process_record_user_mode(uint16_t keycode, keyrecord_t *record) {
         KC_MAP(KC_NEXT_TAB, LCTL(KC_TAB))
         KC_MAP(KC_HOME, LGUI(KC_LEFT))
         KC_MAP(KC_END, LGUI(KC_RGHT))
+        KC_MAP(KC_BSPC_WORD, LALT(KC_BSPC))
+        KC_MAP(KC_DEL_WORD, LALT(KC_DEL))
 
         KC_MAP(OSL(LAYER_UMLAUT), LALT(KC_U))  // mac umlaut leader
 
@@ -173,6 +184,7 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
     update_keyboard_state();
 }
 
+
 ////////// Key based tapping term //////////
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch(keycode) {
@@ -180,6 +192,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         case KC_THUMB_L0:
         // enter
         case KC_THUMB_R0:
+        // thumb hold
+        case TT(LAYER_THUMB):
             return TAPPING_TERM_LAYER;
         // control
         case KC_THUMB_L1:
@@ -192,10 +206,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
-
-////////// Display stuff //////////
-#ifdef OLED_ENABLE
-
+////////// Keymap specific render layer override //////////
 void render_oled(void) {
     uint8_t mods = get_mods();
     switch (get_highest_layer(layer_state)) {
@@ -257,5 +268,3 @@ bool oled_task_user(void) {
     render_oled();
     return false;
 }
-
-#endif
