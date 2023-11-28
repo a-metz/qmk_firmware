@@ -15,8 +15,6 @@
  */
 #pragma once
 
-#include "config_common.h"
-
 #define MASTER_RIGHT
 #define SPLIT_TRANSPORT_MIRROR
 #define SPLIT_OLED_ENABLE
