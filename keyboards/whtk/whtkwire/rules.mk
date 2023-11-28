@@ -9,6 +9,7 @@ BOOTLOADER = stm32-dfu
 KEYBOARD_SHARED_EP = yes
 EXTRAKEY_ENABLE = yes
 OLED_ENABLE = yes
+CONSOLE_ENABLE = no
 
 DEFAULT_FOLDER = whtk/whtkwire
 SRC += oled.c ../shift_alternative.c ../state.c
